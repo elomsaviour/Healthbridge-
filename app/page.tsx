@@ -279,16 +279,16 @@ export default function Home() {
             </div>
             <div className="map-wrap">
               <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380}}>
+              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380,position:'relative'}}>
   <iframe
     width="100%"
     height="100%"
     style={{border:0,display:'block'}}
     loading="lazy"
-    allowFullScreen
-    src={`https://www.google.com/maps/embed/v1/search?key=YOUR_NEW_KEY_HERE&q=pharmacies+in+Lagos&zoom=12`}
+    src="https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792"
   />
 </div>
+
 
             </div>
           </div>
@@ -372,15 +372,15 @@ export default function Home() {
               ))}
             </div>
             <div className="map-wrap">
-              <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380}}>
+              <div className="map-search"><span>🔍</span><input placeholder="Search on placeholder="Search on map..."
+
+<div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380,position:'relative'}}>
   <iframe
     width="100%"
     height="100%"
     style={{border:0,display:'block'}}
     loading="lazy"
-    allowFullScreen
-    src={`https://www.google.com/maps/embed/v1/search?key=YOUR_NEW_KEY_HERE&q=pharmacies+in+Lagos&zoom=12`}
+    src="https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792"
   />
 </div>
 
