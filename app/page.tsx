@@ -372,7 +372,9 @@ export default function Home() {
               ))}
             </div>
             <div className="map-wrap">
-              <div className="map-search"><span>🔍</span><input placeholder="Search on placeholder="Search on map..."
+              <div className="map-search"><span>🔍</span><input placeholder="Search on placeholder="Search on map..."/>
+</div>
+
 
 <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380,position:'relative'}}>
   <iframe
