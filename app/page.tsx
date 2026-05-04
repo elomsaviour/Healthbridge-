@@ -279,7 +279,17 @@ export default function Home() {
             </div>
             <div className="map-wrap">
               <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <div className="map-box"><span className="map-icon">🗺️</span><span className="map-txt">Google Maps Integration</span></div>
+              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380}}>
+  <iframe
+    width="100%"
+    height="100%"
+    style={{border:0,display:'block'}}
+    loading="lazy"
+    allowFullScreen
+    src={`https://www.google.com/maps/embed/v1/search?key=YOUR_NEW_KEY_HERE&q=pharmacies+in+Lagos&zoom=12`}
+  />
+</div>
+
             </div>
           </div>
         </div>}
@@ -363,7 +373,17 @@ export default function Home() {
             </div>
             <div className="map-wrap">
               <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <div className="map-box"><span className="map-icon">🗺️</span><span className="map-txt">Google Maps Integration</span></div>
+              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380}}>
+  <iframe
+    width="100%"
+    height="100%"
+    style={{border:0,display:'block'}}
+    loading="lazy"
+    allowFullScreen
+    src={`https://www.google.com/maps/embed/v1/search?key=YOUR_NEW_KEY_HERE&q=pharmacies+in+Lagos&zoom=12`}
+  />
+</div>
+
             </div>
           </div>
         </div>}
