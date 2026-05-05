@@ -1,37 +1,26 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const S = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --primary: #0891b2;
-    --primary-dark: #0e7490;
-    --primary-light: #ecfeff;
-    --green: #059669;
-    --green-light: #d1fae5;
-    --red: #dc2626;
-    --bg: #f0fafb;
-    --card: #ffffff;
-    --text: #0c1a2e;
-    --muted: #64748b;
-    --border: #cbd5e1;
-    --shadow: 0 2px 12px rgba(8,145,178,0.08);
-    --shadow-lg: 0 8px 28px rgba(8,145,178,0.14);
-    --radius: 12px;
-    --radius-sm: 8px;
+    --primary: #0891b2; --primary-dark: #0e7490; --primary-light: #ecfeff;
+    --green: #059669; --green-light: #d1fae5; --red: #dc2626;
+    --bg: #f0fafb; --card: #ffffff; --text: #0c1a2e; --muted: #64748b;
+    --border: #cbd5e1; --shadow: 0 2px 12px rgba(8,145,178,0.08);
+    --shadow-lg: 0 8px 28px rgba(8,145,178,0.14); --radius: 12px; --radius-sm: 8px;
   }
-  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
   .app { min-height: 100vh; display: flex; flex-direction: column; }
   nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(8,145,178,0.07); }
   .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .logo img { height: 40px; width: auto; }
   .logo-fb { font-weight: 800; font-size: 17px; color: var(--primary); }
   .nav-links { display: flex; gap: 2px; }
   .nav-link { font-size: 14px; color: var(--muted); cursor: pointer; font-weight: 500; padding: 6px 13px; border-radius: 6px; transition: all 0.15s; }
   .nav-link:hover { color: var(--primary); background: var(--primary-light); }
   .nav-right { display: flex; gap: 8px; align-items: center; }
-  .btn-ghost { font-size: 14px; font-weight: 500; color: var(--text); background: none; border: none; cursor: pointer; padding: 8px 14px; border-radius: var(--radius-sm); font-family: Inter,sans-serif; }
+  .btn-ghost { font-size: 14px; font-weight: 500; color: var(--text); background: none; border: none; cursor: pointer; padding: 8px 14px; font-family: Inter,sans-serif; }
   .btn-signup { font-size: 14px; font-weight: 700; color: #fff; background: var(--primary); border: none; cursor: pointer; padding: 9px 20px; border-radius: var(--radius-sm); font-family: Inter,sans-serif; }
   .hero-section { background: linear-gradient(135deg, #0891b2 0%, #0e7490 60%, #065f75 100%); padding: 72px 24px 92px; position: relative; overflow: hidden; }
   .hero-section::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 48px; background: var(--bg); border-radius: 48px 48px 0 0; }
@@ -45,7 +34,7 @@ const S = `
   .hero-search input { flex: 1; border: none; outline: none; font-size: 14px; font-family: Inter,sans-serif; color: var(--text); background: transparent; }
   .hero-search input::placeholder { color: #94a3b8; }
   .btn-green { background: #059669; color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; white-space: nowrap; }
-  .hero-gps { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 500; cursor: pointer; }
+  .hero-gps { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.65); font-size: 13px; cursor: pointer; }
   .hero-stats { display: flex; margin-top: 52px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius); overflow: hidden; }
   .hero-stat { flex: 1; text-align: center; padding: 18px 10px; border-right: 1px solid rgba(255,255,255,0.12); }
   .hero-stat:last-child { border-right: none; }
@@ -68,6 +57,7 @@ const S = `
   .top-search input { flex: 1; border: none; outline: none; font-size: 14px; padding: 12px 16px; font-family: Inter,sans-serif; }
   .top-search button { background: var(--primary); color: #fff; border: none; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; }
   .split-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 640px) { .split-body { grid-template-columns: 1fr; } }
   .p-list { display: flex; flex-direction: column; gap: 10px; }
   .p-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; box-shadow: var(--shadow); }
   .p-card:hover { border-color: #67e8f9; box-shadow: var(--shadow-lg); }
@@ -90,10 +80,9 @@ const S = `
   .map-search { display: flex; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; box-shadow: var(--shadow); }
   .map-search span { display: flex; align-items: center; padding: 0 12px; color: var(--muted); }
   .map-search input { flex: 1; border: none; outline: none; font-size: 13px; padding: 11px 4px; font-family: Inter,sans-serif; }
-  .map-box { background: linear-gradient(145deg,#cffafe,#e0f2fe 50%,#d1fae5); border-radius: var(--radius); border: 1.5px solid #a5f3fc; height: 380px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
-  .map-icon { font-size: 42px; position: relative; }
-  .map-txt { font-size: 13px; font-weight: 600; color: var(--primary); position: relative; }
+  .map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; box-shadow: var(--shadow); height: 380px; }
   .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 640px) { .detail-grid { grid-template-columns: 1fr; } }
   .d-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
   .d-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
   .d-avatar { width: 56px; height: 56px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
@@ -112,15 +101,12 @@ const S = `
   .i-ico { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
   .i-lbl { font-size: 11px; color: var(--muted); margin-bottom: 1px; font-weight: 500; }
   .i-val { font-size: 13px; font-weight: 600; }
-  .d-map { background: linear-gradient(145deg,#cffafe,#e0f2fe 50%,#d1fae5); border-radius: var(--radius); border: 1.5px solid #a5f3fc; height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; margin-bottom: 14px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
-  .d-pin { font-size: 32px; position: relative; }
-  .d-pin-lbl { font-size: 12px; font-weight: 600; color: var(--primary); position: relative; }
+  .d-map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; height: 200px; margin-bottom: 14px; box-shadow: var(--shadow); }
   .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-  .pill { font-size: 12px; font-weight: 600; padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; color: var(--muted); transition: all 0.15s; font-family: Inter,sans-serif; }
+  .pill { font-size: 12px; font-weight: 600; padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; color: var(--muted); font-family: Inter,sans-serif; }
   .pill.on { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
   .drug-list { display: flex; flex-direction: column; gap: 10px; }
-  .drug-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); }
-  .drug-card:hover { border-color: #67e8f9; }
+  .drug-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); }
   .drug-img { width: 46px; height: 46px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
   .drug-body { flex: 1; }
   .drug-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
@@ -135,7 +121,7 @@ const S = `
   .modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
   .modal-title { font-size: 16px; font-weight: 800; }
   .modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
-  .modal-x { background: var(--bg); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); flex-shrink: 0; }
+  .modal-x { background: var(--bg); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; color: var(--muted); }
   .modal-drug { display: flex; gap: 12px; align-items: center; background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; border: 1px solid var(--border); }
   .modal-drug-img { width: 40px; height: 40px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
   .modal-drug-name { font-size: 13px; font-weight: 700; }
@@ -146,12 +132,12 @@ const S = `
   .modal-cancel { width: 100%; background: none; border: none; font-size: 13px; color: var(--muted); cursor: pointer; font-family: Inter,sans-serif; padding: 4px; }
 `;
 
-const PHARMACIES = [
-  { id:1, name:"Lifecare Pharmacy", address:"14 Broad Street, Lagos Island", phone:"0801 234 5678", distance:"0.8km", open:true, hours:"8:00am – 10:00pm", emoji:"💊", rating:"4.7", reviews:"128" },
-  { id:2, name:"MedPlus Pharmacy", address:"27 Allen Avenue, Ikeja", phone:"0802 345 6789", distance:"1.2km", open:true, hours:"24 Hours", emoji:"🏥", rating:"4.5", reviews:"94" },
-  { id:3, name:"HealthPlus Pharmacy", address:"3 Admiralty Way, Lekki Phase 1", phone:"0803 456 7890", distance:"1.8km", open:false, hours:"8:00am – 9:00pm", emoji:"⚕️", rating:"4.3", reviews:"61" },
-  { id:4, name:"Alpha Pharmacy", address:"5 Opebi Road, Ikeja", phone:"0804 567 8901", distance:"2.1km", open:true, hours:"7:00am – 11:00pm", emoji:"💉", rating:"4.6", reviews:"83" },
-  { id:5, name:"Sunrise Pharmacy", address:"10 Victoria Island Boulevard", phone:"0805 678 9012", distance:"2.4km", open:true, hours:"24 Hours", emoji:"🌅", rating:"4.8", reviews:"210" },
+const FALLBACK = [
+  { id:1, name:"Lifecare Pharmacy", address:"14 Broad Street, Lagos Island", phone:"08012345678", distance:"0.8km", open:true, hours:"8:00am-10:00pm", emoji:"💊", rating:"4.7", reviews:"128" },
+  { id:2, name:"MedPlus Pharmacy", address:"27 Allen Avenue, Ikeja", phone:"08023456789", distance:"1.2km", open:true, hours:"24 Hours", emoji:"🏥", rating:"4.5", reviews:"94" },
+  { id:3, name:"HealthPlus Pharmacy", address:"3 Admiralty Way, Lekki", phone:"08034567890", distance:"1.8km", open:false, hours:"8:00am-9:00pm", emoji:"⚕️", rating:"4.3", reviews:"61" },
+  { id:4, name:"Alpha Pharmacy", address:"5 Opebi Road, Ikeja", phone:"08045678901", distance:"2.1km", open:true, hours:"7:00am-11:00pm", emoji:"💉", rating:"4.6", reviews:"83" },
+  { id:5, name:"Sunrise Pharmacy", address:"10 Victoria Island Blvd", phone:"08056789012", distance:"2.4km", open:true, hours:"24 Hours", emoji:"🌅", rating:"4.8", reviews:"210" },
 ];
 
 const DRUGS = [
@@ -163,6 +149,8 @@ const DRUGS = [
 ];
 
 const CATS = ["All","Pain Relief","Antibiotics","Diabetes","Antacids","Vitamins"];
+const EMOJI_MAP: Record<string,string> = {"Lagos Island":"💊","Ikeja":"🏥","Lekki":"⚕️","Victoria Island":"🌅"};
+const MAP_URL = "https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792";
 
 export default function Home() {
   const [page, setPage] = useState("home");
@@ -174,10 +162,30 @@ export default function Home() {
   const [modal, setModal] = useState<any>(null);
   const [msgText, setMsgText] = useState("");
   const [activePg, setActivePg] = useState(1);
+  const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/pharmacies?select=*&order=rating.desc`, {
+      headers: {
+        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
+      }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setPharmacies(data.map((p:any) => ({
+          id: p.id, name: p.name, address: p.address, phone: p.phone,
+          distance: "nearby", open: p.is_open, hours: p.opening_hours,
+          emoji: EMOJI_MAP[p.area] || "💊",
+          rating: p.rating?.toString() || "4.5",
+          reviews: p.reviews?.toString() || "0",
+        })));
+      }
+    }).catch(() => {});
+  }, []);
 
   const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); };
   const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); };
-  const filteredP = PHARMACIES.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
+  const filteredP = pharmacies.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
   const filteredD = DRUGS.filter(d => (activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
   const openModal = (drug: any) => { setModal(drug); setMsgText(`Hello, I'd like to confirm the availability of ${drug.name}`); };
 
@@ -187,8 +195,7 @@ export default function Home() {
       <div className="app">
         <nav>
           <div className="logo" onClick={() => setPage("home")}>
-            <img src="/logo.jpeg" alt="HealthBridge" onError={(e:any) => { e.target.style.display="none"; e.target.nextSibling.style.display="block"; }} />
-            <div className="logo-fb" style={{display:"none"}}>HealthBridge</div>
+            <div className="logo-fb">HealthBridge</div>
           </div>
           <div className="nav-links">
             <span className="nav-link" onClick={() => setPage("home")}>Home</span>
@@ -208,16 +215,16 @@ export default function Home() {
             <div className="hero-inner">
               <div className="hero-badge"><div className="badge-dot"/>Trusted by 200+ verified pharmacies</div>
               <h1>Find your <span>medication</span><br/>near you in minutes</h1>
-              <p className="hero-sub">Search verified pharmacies across Lagos. Get directions, call ahead, and find your medications fast.</p>
+              <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
               <div className="hero-search">
                 <span style={{fontSize:16,marginRight:4}}>🔍</span>
-                <input placeholder="Search pharmacy or medication name..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
+                <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
                 <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
               </div>
               <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
               <div className="hero-stats">
                 <div className="hero-stat"><div className="stat-n">200+</div><div className="stat-l">Verified Pharmacies</div></div>
-                <div className="hero-stat"><div className="stat-n">20+</div><div className="stat-l">Lagos Areas</div></div>
+                <div className="hero-stat"><div className="stat-n">20+</div><div className="stat-l">Areas Covered</div></div>
                 <div className="hero-stat"><div className="stat-n">24/7</div><div className="stat-l">Always Available</div></div>
                 <div className="hero-stat"><div className="stat-n">5k+</div><div className="stat-l">Happy Users</div></div>
               </div>
@@ -225,7 +232,7 @@ export default function Home() {
           </div>
           <div className="services-section">
             <div className="section-title">What can we help you with?</div>
-            <div className="section-sub">Everything you need to access healthcare in Lagos</div>
+            <div className="section-sub">Everything you need to access healthcare near you</div>
             <div className="service-grid">
               {[
                 {icon:"🏥",name:"Find Pharmacies",desc:"Search verified pharmacies by location",action:()=>goResults("")},
@@ -246,7 +253,7 @@ export default function Home() {
         {page==="results" && <div className="page-wrap">
           <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
           <div className="page-title">Results for pharmacy</div>
-          <div className="page-sub">{filteredP.length*8} pharmacies found near you</div>
+          <div className="page-sub">{filteredP.length} pharmacies found near you</div>
           <div className="top-search">
             <input placeholder="🔍  Search pharmacies..." value={resultsQ} onChange={e=>setResultsQ(e.target.value)}/>
             <button>Search</button>
@@ -271,7 +278,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="pagination">
-                <span className="pg-info">Showing 1–10 of 42 pharmacies</span>
+                <span className="pg-info">Showing 1–{filteredP.length} pharmacies</span>
                 <button className="pg-btn">‹</button>
                 {[1,2,3,4,5].map(n=><button key={n} className={`pg-btn${activePg===n?" active":""}`} onClick={()=>setActivePg(n)}>{n}</button>)}
                 <button className="pg-btn">›</button>
@@ -279,17 +286,7 @@ export default function Home() {
             </div>
             <div className="map-wrap">
               <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380,position:'relative'}}>
-  <iframe
-    width="100%"
-    height="100%"
-    style={{border:0,display:'block'}}
-    loading="lazy"
-    src="https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792"
-  />
-</div>
-
-
+              <iframe className="map-frame" src={MAP_URL} width="100%" height="380" style={{border:0,display:"block"}} loading="lazy"></iframe>
             </div>
           </div>
         </div>}
@@ -332,10 +329,10 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <div className="d-map"><span className="d-pin">📍</span><span className="d-pin-lbl">{selected.name}</span></div>
+              <iframe className="d-map-frame" src={MAP_URL} width="100%" height="200" style={{border:0,display:"block"}} loading="lazy"></iframe>
               <div className="d-card">
                 <div className="sec-label">About this pharmacy</div>
-                <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:16}}>Verified and licensed pharmacy serving Lagos residents with genuine medications and professional healthcare services.</p>
+                <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:16}}>Verified and licensed pharmacy serving residents with genuine medications and professional healthcare services.</p>
                 <button className="act-btn act-wa" style={{width:"100%",marginBottom:8}}>💬 Chat on WhatsApp</button>
                 <button className="act-btn act-call" style={{width:"100%"}}>📞 Call Pharmacy</button>
               </div>
@@ -372,20 +369,8 @@ export default function Home() {
               ))}
             </div>
             <div className="map-wrap">
-              <div className="map-search"><span>🔍</span><input placeholder="Search on placeholder="Search on map..."/>
-</div>
-
-
-<div style={{borderRadius:'var(--radius)',overflow:'hidden',border:'1.5px solid #a5f3fc',boxShadow:'var(--shadow)',height:380,position:'relative'}}>
-  <iframe
-    width="100%"
-    height="100%"
-    style={{border:0,display:'block'}}
-    loading="lazy"
-    src="https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792"
-  />
-</div>
-
+              <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
+              <iframe className="map-frame" src={MAP_URL} width="100%" height="380" style={{border:0,display:"block"}} loading="lazy"></iframe>
             </div>
           </div>
         </div>}
@@ -393,10 +378,10 @@ export default function Home() {
         {modal && <div className="overlay" onClick={()=>setModal(null)}>
           <div className="modal" onClick={e=>e.stopPropagation()}>
             <div className="modal-head">
-              <div><div className="modal-title">Chat with Lifecare pharmacy</div></div>
+              <div><div className="modal-title">Chat with {selected?.name || "pharmacy"}</div></div>
               <button className="modal-x" onClick={()=>setModal(null)}>✕</button>
             </div>
-            <div className="modal-sub">You are about to contact Lifecare pharmacy on WhatsApp</div>
+            <div className="modal-sub">You are about to contact this pharmacy on WhatsApp</div>
             <div className="modal-drug">
               <div className="modal-drug-img">{modal.emoji}</div>
               <div>
@@ -410,7 +395,6 @@ export default function Home() {
             <button className="modal-cancel" onClick={()=>setModal(null)}>Cancel</button>
           </div>
         </div>}
-
       </div>
     </>
   );
