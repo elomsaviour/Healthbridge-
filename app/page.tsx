@@ -55,10 +55,26 @@ const S = `
   .page-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
   .top-search { display: flex; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow); }
   .top-search input { flex: 1; border: none; outline: none; font-size: 14px; padding: 12px 16px; font-family: Inter,sans-serif; }
-  .top-search button { background: var(--primary); color: #fff; border: none; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; }
+  .top-search button { background: var(--primary); color: #fff; border: none; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; }-columns: 1fr 1fr; gap: 18px; }
   .split-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  @media (max-width: 640px) { .split-body { grid-template-columns: 1fr; } }
-  .p-list { display: flex; flex-direction: column; gap: 10px; }
+  @media (max-width: 768px) {
+    .split-body { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .nav-right .btn-ghost { display: none; }
+    .page-wrap { padding: 16px; }
+    .hero-section { padding: 48px 16px 72px; }
+    .hero-stats { flex-wrap: wrap; }
+    .hero-stat { min-width: 45%; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .services-section { padding: 28px 16px; }
+    .service-grid { grid-template-columns: 1fr 1fr; }
+    .p-btns { display: none; }
+    .p-card { padding: 12px; }
+    .map-frame { height: 250px; }
+  }
+
+  
   .p-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; box-shadow: var(--shadow); }
   .p-card:hover { border-color: #67e8f9; box-shadow: var(--shadow-lg); }
   .p-avatar { width: 44px; height: 44px; border-radius: 10px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
