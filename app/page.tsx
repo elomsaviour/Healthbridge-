@@ -287,8 +287,10 @@ export default function Home() {
                     </div>
                     <div className="p-btns">
                       <button className="pb pb-view">View details</button>
-                      <button className="pb pb-wa" onClick={e=>e.stopPropagation()}>💬 WhatsApp</button>
-                      <button className="pb pb-call" onClick={e=>e.stopPropagation()}>📞 Call</button>
+                      <button className="pb pb-wa" onClick={e=>{e.stopPropagation();window.open(`https://wa.me/${p.whatsapp}`,'_blank');}}>💬 WhatsApp</button>
+<button className="pb pb-call" onClick={e=>{e.stopPropagation();window.location.href=`tel:${p.phone}`;}}>📞 Call</button>
+
+                      
                     </div>
                   </div>
                 ))}
