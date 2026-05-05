@@ -360,6 +360,52 @@ export default function Home() {
             </div>
           </div>
         </div>}
+{page==="about" && <div>
+  <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
+    <div style={{maxWidth:680,margin:'0 auto',textAlign:'center',position:'relative',zIndex:1}}>
+      <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
+      <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
+      <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
+    </div>
+  </div>
+  <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:20,marginBottom:48}}>
+      {[
+        {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies near them — in seconds.'},
+        {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away and every medication is accessible.'},
+        {icon:'💡',title:'Our Story',desc:'HealthBridge was born from a simple frustration — spending hours searching for a pharmacy that had the right medication. We built the solution we wished existed.'},
+        {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and we never charge users for finding healthcare.'},
+      ].map(s=>(
+        <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'24px 20px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
+          <div style={{fontSize:32,marginBottom:12}}>{s.icon}</div>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>{s.title}</div>
+          <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{background:'#fff',borderRadius:12,padding:'32px 24px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)',marginBottom:24,textAlign:'center'}}>
+      <div style={{fontSize:18,fontWeight:800,marginBottom:20}}>HealthBridge by the numbers</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:16}}>
+        {[
+          {n:'50+',l:'Verified Pharmacies'},
+          {n:'6+',l:'Lagos Areas'},
+          {n:'24/7',l:'Always Available'},
+          {n:'Free',l:'Always Free to Use'},
+        ].map(s=>(
+          <div key={s.l} style={{padding:'16px 8px',background:'#f0fafb',borderRadius:10}}>
+            <div style={{fontSize:24,fontWeight:800,color:'#0891b2'}}>{s.n}</div>
+            <div style={{fontSize:12,color:'#64748b',marginTop:4}}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center'}}>
+      <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
+      <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
+      <button style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+    </div>
+  </div>
+</div>}
 
         {page==="drugs" && <div className="page-wrap">
           <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
