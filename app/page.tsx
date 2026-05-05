@@ -217,7 +217,8 @@ export default function Home() {
             <span className="nav-link" onClick={() => setPage("home")}>Home</span>
             <span className="nav-link" onClick={() => goResults("")}>Pharmacies</span>
             <span className="nav-link" onClick={goDrugs}>Medications</span>
-            <span className="nav-link">About us</span>
+            <span className="nav-link" onClick={() => setPage("about")}>About us</span>
+
             <span className="nav-link">Help</span>
           </div>
           <div className="nav-right">
