@@ -324,8 +324,10 @@ export default function Home() {
                 </div>
                 <div className="sec-label">Quick Actions</div>
                 <div className="action-grid">
-                  <button className="act-btn act-wa">💬 WhatsApp</button>
-                  <button className="act-btn act-call">📞 Call</button>
+                  <button className="act-btn act-wa" onClick={()=>window.open(`https://wa.me/${selected.whatsapp}`,'_blank')}>💬 WhatsApp</button>
+<button className="act-btn act-call" onClick={()=>window.location.href=`tel:${selected.phone}`}>📞 Call</button>
+
+                
                   <button className="act-btn act-dir">🗺️ Directions</button>
                   <button className="act-btn act-save">🔖 Save</button>
                 </div>
