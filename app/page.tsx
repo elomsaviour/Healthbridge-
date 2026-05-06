@@ -267,44 +267,92 @@ const [formStatus, setFormStatus] = useState('');
         </nav>
 
         {page==="home" && <>
-          <div className="hero-section">
-            <div className="hero-inner">
-              <div className="hero-badge"><div className="badge-dot"/>Trusted by 200+ verified pharmacies</div>
-              <h1>Find your <span>medication</span><br/>near you in minutes</h1>
-              <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
-              <div className="hero-search">
-                <span style={{fontSize:16,marginRight:4}}>🔍</span>
-                <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
-                <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
-              </div>
-              <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
-              <div className="hero-stats">
-                <div className="hero-stat"><div className="stat-n">200+</div><div className="stat-l">Verified Pharmacies</div></div>
-                <div className="hero-stat"><div className="stat-n">20+</div><div className="stat-l">Areas Covered</div></div>
-                <div className="hero-stat"><div className="stat-n">24/7</div><div className="stat-l">Always Available</div></div>
-                <div className="hero-stat"><div className="stat-n">5k+</div><div className="stat-l">Happy Users</div></div>
-              </div>
+          {page==="home" && <>
+  <div className="hero-section">
+    <div className="hero-inner">
+      <div className="hero-badge"><div className="badge-dot"/>Nigeria's Healthcare Navigator</div>
+      <h1>Find your <span>medication</span><br/>near you in minutes</h1>
+      <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
+      <div className="hero-search">
+        <span style={{fontSize:16,marginRight:4}}>🔍</span>
+        <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
+        <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
+      </div>
+      <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
+    </div>
+  </div>
+
+  <div style={{maxWidth:960,margin:'0 auto',padding:'48px 24px',width:'100%'}}>
+
+    <div style={{marginBottom:48}}>
+      <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
+      <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
+      <div style={{fontSize:14,color:'var(--muted)'}}>Everything you need to access healthcare — in one place</div>
+    </div>
+
+    <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch',marginBottom:48}}>
+      {[
+        {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
+        {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
+        {icon:'🗺️',title:'Get Directions',desc:'Get turn-by-turn directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
+        {icon:'📞',title:'Call Directly',desc:'Call any pharmacy with one tap. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
+        {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy directly on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
+        {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy or licensed drug store? Join HealthBridge and reach more patients free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>setPage("register")},
+      ].map(s=>(
+        <div key={s.title} onClick={s.action} style={{minWidth:260,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'28px 22px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,transition:'transform 0.2s',boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
+          <div style={{fontSize:36,marginBottom:14}}>{s.icon}</div>
+          <div style={{fontSize:16,fontWeight:800,marginBottom:8,color:'var(--text)'}}>{s.title}</div>
+          <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
+          <div style={{marginTop:16,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
+        </div>
+      ))}
+    </div>
+
+    <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:16,padding:'36px 28px',marginBottom:48,position:'relative',overflow:'hidden'}}>
+      <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,background:'rgba(255,255,255,0.05)',borderRadius:'50%'}}/>
+      <div style={{fontSize:13,fontWeight:700,color:'#a7f3d0',textTransform:'uppercase',letterSpacing:1,marginBottom:10}}>For pharmacy owners</div>
+      <div style={{fontSize:22,fontWeight:800,color:'#fff',marginBottom:10,lineHeight:1.3}}>Do you own a pharmacy or licensed drug store?</div>
+      <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:24,lineHeight:1.6}}>HealthBridge has got you covered. List your pharmacy for free, reach thousands of patients near you, and grow your business — all from your phone.</div>
+      <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+        <button onClick={()=>setPage("register")} style={{background:'#fff',color:'var(--primary)',border:'none',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+        <button onClick={()=>setPage("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
+      </div>
+    </div>
+
+    <div style={{marginBottom:48}}>
+      <div style={{fontSize:22,fontWeight:800,marginBottom:6}}>Frequently Asked Questions</div>
+      <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to know about HealthBridge</div>
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        {[
+          {q:'Is HealthBridge free to use?',a:'Yes! HealthBridge is completely free for patients. You can search for pharmacies and medications at no cost.'},
+          {q:'How do I find a pharmacy near me?',a:'Tap "Find a Pharmacy" or use the search bar on the homepage. You can search by area, street or pharmacy name.'},
+          {q:'How do I know if a pharmacy has my medication?',a:'Tap "Find Medications", search for your drug, then use the WhatsApp button to message the pharmacy directly to confirm availability.'},
+          {q:'How can I list my pharmacy on HealthBridge?',a:'Tap "List Your Pharmacy" and fill in the registration form. Our team will review and verify your pharmacy within 24 hours.'},
+          {q:'Are all pharmacies on HealthBridge verified?',a:'Yes. Every pharmacy listed on HealthBridge goes through our verification process to ensure they are licensed and legitimate.'},
+          {q:'Which areas does HealthBridge cover?',a:'We currently cover Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada and more. We are expanding soon.'},
+        ].map((f,i)=>(
+          <div key={i} style={{background:'var(--card)',borderRadius:12,border:'1.5px solid var(--border)',overflow:'hidden',boxShadow:'var(--shadow)'}}>
+            <div style={{padding:'16px 20px',fontWeight:700,fontSize:14,color:'var(--text)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              {f.q}<span style={{color:'var(--primary)',fontSize:18}}>+</span>
             </div>
+            <div style={{padding:'0 20px 16px',fontSize:13,color:'var(--muted)',lineHeight:1.6,borderTop:'1px solid var(--border)',paddingTop:12}}>{f.a}</div>
           </div>
-          <div className="services-section">
-            <div className="section-title">What can we help you with?</div>
-            <div className="section-sub">Everything you need to access healthcare near you</div>
-            <div className="service-grid">
-              {[
-                {icon:"🏥",name:"Find Pharmacies",desc:"Search verified pharmacies by location",action:()=>goResults("")},
-                {icon:"💊",name:"Find Medications",desc:"Search for specific drugs near you",action:goDrugs},
-                {icon:"📞",name:"Call Directly",desc:"One tap to call any pharmacy",action:()=>goResults("")},
-                {icon:"🗺️",name:"Get Directions",desc:"Open Maps to any pharmacy",action:()=>goResults("")},
-              ].map(s=>(
-                <div key={s.name} className="service-card" onClick={s.action}>
-                  <div className="svc-icon">{s.icon}</div>
-                  <div className="svc-name">{s.name}</div>
-                  <div className="svc-desc">{s.desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>}
+        ))}
+      </div>
+    </div>
+
+    <div style={{background:'var(--card)',borderRadius:16,padding:'36px 28px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center'}}>
+      <div style={{fontSize:22,fontWeight:800,marginBottom:8}}>Ready to find your medication?</div>
+      <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
+      <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+        <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
+        <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+      </div>
+    </div>
+
+  </div>
+</>}
+
 
         {page==="results" && <div className="page-wrap">
           <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
