@@ -220,15 +220,6 @@ const [formStatus, setFormStatus] = useState('');
     }
   }).catch(() => {});
    }, []);
- id: p.id, name: p.name, address: p.address, phone: p.phone,
-          distance: "nearby", open: p.is_open, hours: p.opening_hours,
-          emoji: EMOJI_MAP[p.area] || "💊",
-          rating: p.rating?.toString() || "4.5",
-          reviews: p.reviews?.toString() || "0",
-        })));
-      }
-    }).catch(() => {});
-  }, []);
 
   const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); };
   const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); };
