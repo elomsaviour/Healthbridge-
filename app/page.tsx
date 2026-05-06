@@ -178,7 +178,9 @@ export default function Home() {
   const [modal, setModal] = useState<any>(null);
   const [msgText, setMsgText] = useState("");
   const [activePg, setActivePg] = useState(1);
-  const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
+ const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
+ const [medications, setMedications] = useState<any[]>(DRUGS);
+
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/pharmacies?select=*&order=rating.desc`, {
@@ -186,9 +188,28 @@ export default function Home() {
         'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
         'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
       }
-    }).then(r => r.json()).then(data => {
+      fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/medications?select=*&order=name.asc`, {
+    headers: {
+      'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
+    }
+ 
+      }).then(r => r.json()).then(data => {
       if (Array.isArray(data) && data.length > 0) {
         setPharmacies(data.map((p:any) => ({
+  }).then(r => r.json()).then(data => {
+    if (Array.isArray(data) && data.length > 0) {
+      setMedications(data.map((m:any) => ({
+        id: m.id,
+        name: m.name,
+        type: `${m.unit} · ${m.category}`,
+        price: `₦${m.price_min}`,
+        emoji: getCategoryEmoji(m.category),
+        cat: m.category,
+      })));
+    }
+  }).catch(() => {});
+
           id: p.id, name: p.name, address: p.address, phone: p.phone,
           distance: "nearby", open: p.is_open, hours: p.opening_hours,
           emoji: EMOJI_MAP[p.area] || "💊",
@@ -202,8 +223,25 @@ export default function Home() {
   const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); };
   const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); };
   const filteredP = pharmacies.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
-  const filteredD = DRUGS.filter(d => (activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
+  const filteredD = medications.filter(d =>(activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
   const openModal = (drug: any) => { setModal(drug); setMsgText(`Hello, I'd like to confirm the availability of ${drug.name}`); };
+  const getCategoryEmoji = (cat: string) => {
+    const map: Record<string,string> = {
+      'Pain Relief':'💊','Antibiotics':'💉','Malaria':'🦟',
+      'Diabetes':'🩸','Blood Pressure':'❤️','Vitamins':'🌿',
+      'Antacids':'🫃','Allergy':'🤧','Cough & Cold':'🤒',
+      'Antifungal':'🍄','Skin':'🧴','Eye Care':'👁️',
+      'Mental Health':'🧠','Heart':'❤️','Women Health':'👩',
+      'Deworming':'🐛','Digestive':'🫃','Respiratory':'🫁',
+      'Antiviral':'🦠','Wound Care':'🩹','Thyroid':'🦋',
+      'Kidney':'🫘','Supplements':'💪','Sleep':'😴',
+      'Men Health':'👨','Tuberculosis':'🫁','HIV':'🔴',
+      'Antiparasitic':'🐛','Bone Health':'🦴','Steroids':'💉',
+      'Blood Thinners':'🩸','Rehydration':'💧','Dental':'🦷',
+      'Ear Care':'👂','Liver':'🫀',
+    };
+    return map[cat] || '💊';
+  };
 
   return (
     <>
