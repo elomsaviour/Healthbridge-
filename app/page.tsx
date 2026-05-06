@@ -180,6 +180,8 @@ export default function Home() {
   const [activePg, setActivePg] = useState(1);
  const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
  const [medications, setMedications] = useState<any[]>(DRUGS);
+const [form, setForm] = useState({name:'',address:'',phone:'',whatsapp:'',area:'',opening_hours:'',email:'',owner_name:''});
+const [formStatus, setFormStatus] = useState('');
 
 
   useEffect(() => {
@@ -398,6 +400,81 @@ export default function Home() {
             </div>
           </div>
         </div>}
+{page==="register" && <div className="page-wrap">
+  <button className="back-btn" onClick={()=>setPage("about")}>← Back</button>
+  <div className="page-title">List Your Pharmacy Free</div>
+  <div className="page-sub">Join 50+ verified pharmacies on HealthBridge and reach thousands of patients near you</div>
+  <div style={{background:'var(--card)',borderRadius:'var(--radius)',padding:24,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
+    {formStatus==='success' ? (
+      <div style={{textAlign:'center',padding:'40px 20px'}}>
+        <div style={{fontSize:48,marginBottom:16}}>🎉</div>
+        <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>Application Submitted!</div>
+        <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>We will review your application and get back to you within 24 hours.</div>
+        <button onClick={()=>{setPage("home");setFormStatus('');}} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Back to Home</button>
+      </div>
+    ) : (
+      <div style={{display:'flex',flexDirection:'column',gap:16}}>
+        {[
+          {label:'Pharmacy Name *',key:'name',placeholder:'e.g. Lifecare Pharmacy'},
+          {label:'Owner Name *',key:'owner_name',placeholder:'Your full name'},
+          {label:'Email Address *',key:'email',placeholder:'your@email.com'},
+          {label:'Phone Number *',key:'phone',placeholder:'08012345678'},
+          {label:'WhatsApp Number',key:'whatsapp',placeholder:'2348012345678'},
+          {label:'Full Address *',key:'address',placeholder:'e.g. 14 Broad Street, Lagos Island'},
+          {label:'Opening Hours *',key:'opening_hours',placeholder:'e.g. 8:00am - 10:00pm or 24 Hours'},
+        ].map(f=>(
+          <div key={f.key}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:'var(--text)'}}>{f.label}</div>
+            <input
+              value={form[f.key as keyof typeof form]}
+              onChange={e=>setForm({...form,[f.key]:e.target.value})}
+              placeholder={f.placeholder}
+              style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}
+            />
+          </div>
+        ))}
+        <div>
+          <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Area *</div>
+          <select
+            value={form.area}
+            onChange={e=>setForm({...form,area:e.target.value})}
+            style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)',background:'white'}}
+          >
+            <option value="">Select area</option>
+            {['Lagos Island','Ikeja','Lekki','Victoria Island','Surulere','Yaba','Shomolu','Bariga','Gbagada','Ikoyi','Apapa','Ajah','Festac','Isolo','Mushin','Oshodi','Agege','Alimosho','Ikorodu','Epe'].map(a=>(
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+        </div>
+        {formStatus==='error' && <div style={{background:'#fee2e2',color:'#dc2626',padding:'12px 16px',borderRadius:'var(--radius-sm)',fontSize:13,fontWeight:500}}>Please fill in all required fields</div>}
+        <button
+          onClick={async()=>{
+            if(!form.name||!form.address||!form.phone||!form.area||!form.email||!form.owner_name){
+              setFormStatus('error');return;
+            }
+            try{
+              await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/pharmacy_submissions`,{
+                method:'POST',
+                headers:{
+                  'apikey':process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY||'',
+                  'Authorization':`Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY||''}`,
+                  'Content-Type':'application/json',
+                  'Prefer':'return=minimal',
+                },
+                body:JSON.stringify(form),
+              });
+              setFormStatus('success');
+            }catch(e){
+              setFormStatus('error');
+            }
+          }}
+          style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'14px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif',width:'100%',marginTop:8}}
+        >Submit Application →</button>
+        <div style={{fontSize:12,color:'var(--muted)',textAlign:'center'}}>By submitting you agree to our terms. Listing is completely free.</div>
+      </div>
+    )}
+  </div>
+</div>}
 {page==="about" && <div>
   <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
     <div style={{maxWidth:680,margin:'0 auto',textAlign:'center',position:'relative',zIndex:1}}>
@@ -440,7 +517,8 @@ export default function Home() {
     <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center'}}>
       <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
       <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
-      <button style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+      <button onClick={() => setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+
     </div>
   </div>
 </div>}
