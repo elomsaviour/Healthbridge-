@@ -219,29 +219,8 @@ const [formStatus, setFormStatus] = useState('');
       })));
     }
   }).catch(() => {});
-
-    headers: {
-      'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
-    }
- 
-      }).then(r => r.json()).then(data => {
-      if (Array.isArray(data) && data.length > 0) {
-        setPharmacies(data.map((p:any) => ({
-  }).then(r => r.json()).then(data => {
-    if (Array.isArray(data) && data.length > 0) {
-      setMedications(data.map((m:any) => ({
-        id: m.id,
-        name: m.name,
-        type: `${m.unit} · ${m.category}`,
-        price: `₦${m.price_min}`,
-        emoji: getCategoryEmoji(m.category),
-        cat: m.category,
-      })));
-    }
-  }).catch(() => {});
-
-          id: p.id, name: p.name, address: p.address, phone: p.phone,
+   }, []);
+ id: p.id, name: p.name, address: p.address, phone: p.phone,
           distance: "nearby", open: p.is_open, hours: p.opening_hours,
           emoji: EMOJI_MAP[p.area] || "💊",
           rating: p.rating?.toString() || "4.5",
