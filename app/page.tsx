@@ -352,11 +352,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div style={{background:'var(--card)',borderRadius:16,padding:'36px 28px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center' as any}}>
-                <div style={{fontSize:22,fontWeight:800,marginBottom:8}}>Ready to find your medication?</div>
-                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
-                <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap' as any}}>
-                  <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
+              Click={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
                   <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
                 </div>
               </div>
