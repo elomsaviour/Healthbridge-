@@ -352,7 +352,41 @@ export default function Home() {
                 </div>
               </div>
 
-              Click={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
+                  <div style={{background:'var(--card)',borderRadius:16,padding:'32px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:24}}>
+        <div style={{fontSize:20,fontWeight:800,marginBottom:20,textAlign:'center' as any}}>Everything you need to know about HealthBridge</div>
+        <div style={{display:'flex',flexDirection:'column' as any,gap:16}}>
+          {[
+            {icon:'🆓',title:'Is HealthBridge free?',desc:'Yes — completely free for patients. No hidden charges, no subscriptions. Search, call, WhatsApp and get directions all for free.'},
+            {icon:'✅',title:'Are pharmacies verified?',desc:'Every pharmacy on HealthBridge is verified and licensed by the Pharmaceutical Council of Nigeria (PCN) before being listed.'},
+            {icon:'🗺️',title:'Where do we operate?',desc:'We currently cover all major areas in Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada, Ikoyi, Apapa and more. Expanding soon.'},
+            {icon:'💊',title:'How to find your medication',desc:'Tap "Find Medications" on the home page, search for your drug name, and WhatsApp the nearest pharmacy to confirm availability before visiting.'},
+            {icon:'🏥',title:'How to find a pharmacy',desc:'Tap "Find a Pharmacy", search by name or area, view details, call directly or get directions. All pharmacies show open/closed status.'},
+            {icon:'📞',title:'How calling works',desc:'Tap the Call button on any pharmacy card. It dials the pharmacy directly from your phone — one tap, no stress.'},
+            {icon:'💬',title:'How WhatsApp works',desc:'Tap the WhatsApp button on any pharmacy or medication. A pre-filled message opens in WhatsApp — just send it to the pharmacy.'},
+            {icon:'🏪',title:'Listing your pharmacy',desc:'Tap "List Your Pharmacy" from the menu. Fill in your details, submit, and our team will verify and list your pharmacy within 24 hours — for free.'},
+            {icon:'🔒',title:'Your privacy',desc:'HealthBridge does not store your personal information. We do not track your searches or share your data with third parties.'},
+            {icon:'📧',title:'Contact us',desc:'Have a question or issue? Reach us via WhatsApp or email. We are available Monday to Saturday, 8am to 8pm WAT.'},
+          ].map((item,i)=>(
+            <div key={i} style={{display:'flex',gap:14,alignItems:'flex-start',padding:'16px',background:'var(--bg)',borderRadius:10,border:'1px solid var(--border)'}}>
+              <div style={{fontSize:24,flexShrink:0}}>{item.icon}</div>
+              <div>
+                <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:'var(--text)'}}>{item.title}</div>
+                <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{item.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center' as any}}>
+        <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
+        <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
+        <button onClick={()=>setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+      </div>
+    </div>
+  </div>
+)}
+  Click={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
                   <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
                 </div>
               </div>
