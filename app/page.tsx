@@ -1,7 +1,7 @@
-'use client'
+use client'
 import { useState, useEffect } from "react";
 
-const S = `
+const S = ` 
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -22,6 +22,18 @@ const S = `
   .nav-right { display: flex; gap: 8px; align-items: center; }
   .btn-ghost { font-size: 14px; font-weight: 500; color: var(--text); background: none; border: none; cursor: pointer; padding: 8px 14px; font-family: Inter,sans-serif; }
   .btn-signup { font-size: 14px; font-weight: 700; color: #fff; background: var(--primary); border: none; cursor: pointer; padding: 9px 20px; border-radius: var(--radius-sm); font-family: Inter,sans-serif; }
+  .mobile-menu { position: fixed; top: 62px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; z-index: 99; flex-direction: column; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .mobile-link { font-size: 15px; color: var(--text); cursor: pointer; font-weight: 500; padding: 12px 16px; border-radius: 8px; }
+  .mobile-link:hover { background: var(--primary-light); color: var(--primary); }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-right .btn-ghost { display: none; }
+    .page-wrap { padding: 16px; }
+    .hero-section { padding: 48px 16px 72px; }
+    .split-body { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .map-frame { height: 250px; }
+  }
   .hero-section { background: linear-gradient(135deg, #0891b2 0%, #0e7490 60%, #065f75 100%); padding: 72px 24px 92px; position: relative; overflow: hidden; }
   .hero-section::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 48px; background: var(--bg); border-radius: 48px 48px 0 0; }
   .hero-inner { max-width: 680px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
@@ -35,46 +47,15 @@ const S = `
   .hero-search input::placeholder { color: #94a3b8; }
   .btn-green { background: #059669; color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; white-space: nowrap; }
   .hero-gps { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.65); font-size: 13px; cursor: pointer; }
-  .hero-stats { display: flex; margin-top: 52px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius); overflow: hidden; }
-  .hero-stat { flex: 1; text-align: center; padding: 18px 10px; border-right: 1px solid rgba(255,255,255,0.12); }
-  .hero-stat:last-child { border-right: none; }
-  .stat-n { font-size: 24px; font-weight: 800; color: #fff; }
-  .stat-l { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; }
-  .services-section { max-width: 960px; margin: 0 auto; padding: 44px 24px; width: 100%; }
-  .section-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-  .section-sub { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
-  .service-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 14px; }
-  .service-card { background: var(--card); border-radius: var(--radius); padding: 24px 18px; border: 1.5px solid var(--border); box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s; text-align: center; }
-  .service-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: #67e8f9; }
-  .svc-icon { font-size: 32px; margin-bottom: 12px; }
-  .svc-name { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
-  .svc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
   .page-wrap { flex: 1; max-width: 960px; margin: 0 auto; width: 100%; padding: 28px 24px; }
   .back-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1.5px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; margin-bottom: 20px; font-family: Inter,sans-serif; padding: 7px 16px; border-radius: 20px; box-shadow: var(--shadow); }
   .page-title { font-size: 21px; font-weight: 800; margin-bottom: 3px; }
   .page-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
   .top-search { display: flex; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow); }
   .top-search input { flex: 1; border: none; outline: none; font-size: 14px; padding: 12px 16px; font-family: Inter,sans-serif; }
-  .top-search button { background: var(--primary); color: #fff; border: none; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; }-columns: 1fr 1fr; gap: 18px; }
+  .top-search button { background: var(--primary); color: #fff; border: none; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; }
   .split-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  @media (max-width: 768px) {
-    .split-body { grid-template-columns: 1fr; }
-    .detail-grid { grid-template-columns: 1fr; }
-    nav { padding: 0 16px; }
-    .nav-links { display: none; }
-    .nav-right .btn-ghost { display: none; }
-    .page-wrap { padding: 16px; }
-    .hero-section { padding: 48px 16px 72px; }
-    .hero-stats { flex-wrap: wrap; }
-    .hero-stat { min-width: 45%; border-bottom: 1px solid rgba(255,255,255,0.12); }
-    .services-section { padding: 28px 16px; }
-    .service-grid { grid-template-columns: 1fr 1fr; }
-    .p-btns { display: none; }
-    .p-card { padding: 12px; }
-    .map-frame { height: 250px; }
-  }
-
-  
+  .p-list { display: flex; flex-direction: column; gap: 10px; }
   .p-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; box-shadow: var(--shadow); }
   .p-card:hover { border-color: #67e8f9; box-shadow: var(--shadow-lg); }
   .p-avatar { width: 44px; height: 44px; border-radius: 10px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
@@ -96,9 +77,8 @@ const S = `
   .map-search { display: flex; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; box-shadow: var(--shadow); }
   .map-search span { display: flex; align-items: center; padding: 0 12px; color: var(--muted); }
   .map-search input { flex: 1; border: none; outline: none; font-size: 13px; padding: 11px 4px; font-family: Inter,sans-serif; }
-  .map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; box-shadow: var(--shadow); height: 380px; }
+  .map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; box-shadow: var(--shadow); height: 380px; display: block; width: 100%; }
   .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
-  @media (max-width: 640px) { .detail-grid { grid-template-columns: 1fr; } }
   .d-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
   .d-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
   .d-avatar { width: 56px; height: 56px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
@@ -117,7 +97,7 @@ const S = `
   .i-ico { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
   .i-lbl { font-size: 11px; color: var(--muted); margin-bottom: 1px; font-weight: 500; }
   .i-val { font-size: 13px; font-weight: 600; }
-  .d-map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; height: 200px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .d-map-frame { border-radius: var(--radius); overflow: hidden; border: 1.5px solid #a5f3fc; height: 200px; margin-bottom: 14px; box-shadow: var(--shadow); display: block; width: 100%; }
   .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .pill { font-size: 12px; font-weight: 600; padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; color: var(--muted); font-family: Inter,sans-serif; }
   .pill.on { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
@@ -137,7 +117,7 @@ const S = `
   .modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
   .modal-title { font-size: 16px; font-weight: 800; }
   .modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
-  .modal-x { background: var(--bg); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; color: var(--muted); }
+  .modal-x { background: var(--bg); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; color: var(--muted); display: flex; align-items: center; justify-content: center; }
   .modal-drug { display: flex; gap: 12px; align-items: center; background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; border: 1px solid var(--border); }
   .modal-drug-img { width: 40px; height: 40px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
   .modal-drug-name { font-size: 13px; font-weight: 700; }
@@ -148,15 +128,15 @@ const S = `
   .modal-cancel { width: 100%; background: none; border: none; font-size: 13px; color: var(--muted); cursor: pointer; font-family: Inter,sans-serif; padding: 4px; }
 `;
 
-const FALLBACK = [
-  { id:1, name:"Lifecare Pharmacy", address:"14 Broad Street, Lagos Island", phone:"08012345678", distance:"0.8km", open:true, hours:"8:00am-10:00pm", emoji:"💊", rating:"4.7", reviews:"128" },
-  { id:2, name:"MedPlus Pharmacy", address:"27 Allen Avenue, Ikeja", phone:"08023456789", distance:"1.2km", open:true, hours:"24 Hours", emoji:"🏥", rating:"4.5", reviews:"94" },
-  { id:3, name:"HealthPlus Pharmacy", address:"3 Admiralty Way, Lekki", phone:"08034567890", distance:"1.8km", open:false, hours:"8:00am-9:00pm", emoji:"⚕️", rating:"4.3", reviews:"61" },
-  { id:4, name:"Alpha Pharmacy", address:"5 Opebi Road, Ikeja", phone:"08045678901", distance:"2.1km", open:true, hours:"7:00am-11:00pm", emoji:"💉", rating:"4.6", reviews:"83" },
-  { id:5, name:"Sunrise Pharmacy", address:"10 Victoria Island Blvd", phone:"08056789012", distance:"2.4km", open:true, hours:"24 Hours", emoji:"🌅", rating:"4.8", reviews:"210" },
+const FALLBACK: any[] = [
+  { id:1, name:"Lifecare Pharmacy", address:"14 Broad Street, Lagos Island", phone:"08012345678", distance:"0.8km", open:true, hours:"8:00am-10:00pm", emoji:"💊", rating:"4.7", reviews:"128", whatsapp:"2348012345678" },
+  { id:2, name:"MedPlus Pharmacy", address:"27 Allen Avenue, Ikeja", phone:"08023456789", distance:"1.2km", open:true, hours:"24 Hours", emoji:"🏥", rating:"4.5", reviews:"94", whatsapp:"2348023456789" },
+  { id:3, name:"HealthPlus Pharmacy", address:"3 Admiralty Way, Lekki", phone:"08034567890", distance:"1.8km", open:false, hours:"8:00am-9:00pm", emoji:"⚕️", rating:"4.3", reviews:"61", whatsapp:"2348034567890" },
+  { id:4, name:"Alpha Pharmacy", address:"5 Opebi Road, Ikeja", phone:"08045678901", distance:"2.1km", open:true, hours:"7:00am-11:00pm", emoji:"💉", rating:"4.6", reviews:"83", whatsapp:"2348045678901" },
+  { id:5, name:"Sunrise Pharmacy", address:"10 Victoria Island Blvd", phone:"08056789012", distance:"2.4km", open:true, hours:"24 Hours", emoji:"🌅", rating:"4.8", reviews:"210", whatsapp:"2348056789012" },
 ];
 
-const DRUGS = [
+const DRUGS_FALLBACK: any[] = [
   { id:1, name:"Paracetamol 500mg", type:"Tablet · Pain Relief", price:"₦350", emoji:"💊", cat:"Pain Relief" },
   { id:2, name:"Amoxicillin 250mg", type:"Capsule · Antibiotic", price:"₦1,200", emoji:"💉", cat:"Antibiotics" },
   { id:3, name:"Ibuprofen 400mg", type:"Tablet · Anti-inflammatory", price:"₦500", emoji:"🔵", cat:"Pain Relief" },
@@ -164,12 +144,30 @@ const DRUGS = [
   { id:5, name:"Omeprazole 20mg", type:"Capsule · Antacid", price:"₦650", emoji:"🟠", cat:"Antacids" },
 ];
 
-const CATS = ["All","Pain Relief","Antibiotics","Diabetes","Antacids","Vitamins"];
-const EMOJI_MAP: Record<string,string> = {"Lagos Island":"💊","Ikeja":"🏥","Lekki":"⚕️","Victoria Island":"🌅"};
+const CATS = ["All","Pain Relief","Antibiotics","Diabetes","Antacids","Vitamins","Malaria","Blood Pressure","Skin","Eye Care","Cough & Cold"];
+const EMOJI_MAP: Record<string,string> = {"Lagos Island":"💊","Ikeja":"🏥","Lekki":"⚕️","Victoria Island":"🌅","Surulere":"💉","Yaba":"🏪","Shomolu":"🏬","Bariga":"🏥","Gbagada":"💊","Ikoyi":"⭐"};
 const MAP_URL = "https://www.openstreetmap.org/export/embed.html?bbox=3.1191%2C6.3933%2C3.7773%2C6.7022&layer=mapnik&marker=6.5244%2C3.3792";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
+const getCategoryEmoji = (cat: string) => {
+  const map: Record<string,string> = {
+    'Pain Relief':'💊','Antibiotics':'💉','Malaria':'🦟','Diabetes':'🩸',
+    'Blood Pressure':'❤️','Vitamins':'🌿','Antacids':'🫃','Allergy':'🤧',
+    'Cough & Cold':'🤒','Antifungal':'🍄','Skin':'🧴','Eye Care':'👁️',
+    'Mental Health':'🧠','Heart':'❤️','Women Health':'👩','Deworming':'🐛',
+    'Digestive':'🫃','Respiratory':'🫁','Antiviral':'🦠','Wound Care':'🩹',
+    'Thyroid':'🦋','Kidney':'🫘','Supplements':'💪','Sleep':'😴',
+    'Men Health':'👨','Tuberculosis':'🫁','HIV':'🔴','Antiparasitic':'🐛',
+    'Bone Health':'🦴','Steroids':'💉','Blood Thinners':'🩸','Rehydration':'💧',
+    'Dental':'🦷','Ear Care':'👂','Liver':'🫀',
+  };
+  return map[cat] || '💊';
+};
 
 export default function Home() {
   const [page, setPage] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [homeQ, setHomeQ] = useState("");
   const [resultsQ, setResultsQ] = useState("");
   const [drugsQ, setDrugsQ] = useState("");
@@ -178,453 +176,432 @@ export default function Home() {
   const [modal, setModal] = useState<any>(null);
   const [msgText, setMsgText] = useState("");
   const [activePg, setActivePg] = useState(1);
- const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
- const [medications, setMedications] = useState<any[]>(DRUGS);
-const [form, setForm] = useState({name:'',address:'',phone:'',whatsapp:'',area:'',opening_hours:'',email:'',owner_name:''});
-const [formStatus, setFormStatus] = useState('');
-
+  const [pharmacies, setPharmacies] = useState<any[]>(FALLBACK);
+  const [medications, setMedications] = useState<any[]>(DRUGS_FALLBACK);
+  const [form, setForm] = useState({name:'',address:'',phone:'',whatsapp:'',area:'',opening_hours:'',email:'',owner_name:''});
+  const [formStatus, setFormStatus] = useState('');
 
   useEffect(() => {
-      fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/pharmacies?select=*&order=rating.desc`, {
-    headers: {
-      'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
-    }
-  }).then(r => r.json()).then(data => {
-    if (Array.isArray(data) && data.length > 0) {
-      setPharmacies(data.map((p:any) => ({
-        id: p.id, name: p.name, address: p.address, phone: p.phone,
-        distance: "nearby", open: p.is_open, hours: p.opening_hours,
-        emoji: EMOJI_MAP[p.area] || "💊",
-        rating: p.rating?.toString() || "4.5",
-        reviews: p.reviews?.toString() || "0",
-      })));
-    }
-  }).catch(() => {});
+    if (!SUPABASE_URL || !SUPABASE_KEY) return;
+    fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*&order=rating.desc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setPharmacies(data.map((p:any) => ({
+          id: p.id, name: p.name, address: p.address, phone: p.phone,
+          distance: "nearby", open: p.is_open, hours: p.opening_hours,
+          emoji: EMOJI_MAP[p.area] || "💊",
+          rating: p.rating?.toString() || "4.5",
+          reviews: p.reviews?.toString() || "0",
+          whatsapp: p.whatsapp,
+        })));
+      }
+    }).catch(() => {});
 
-  fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/medications?select=*&order=name.asc`, {
-    headers: {
-      'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
-    }
-  }).then(r => r.json()).then(data => {
-    if (Array.isArray(data) && data.length > 0) {
-      setMedications(data.map((m:any) => ({
-        id: m.id,
-        name: m.name,
-        type: `${m.unit} · ${m.category}`,
-        price: `₦${m.price_min}`,
-        emoji: getCategoryEmoji(m.category),
-        cat: m.category,
-      })));
-    }
-  }).catch(() => {});
-   }, []);
+    fetch(`${SUPABASE_URL}/rest/v1/medications?select=*&order=name.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setMedications(data.map((m:any) => ({
+          id: m.id, name: m.name,
+          type: `${m.unit} · ${m.category}`,
+          price: `₦${m.price_min}`,
+          emoji: getCategoryEmoji(m.category),
+          cat: m.category,
+        })));
+      }
+    }).catch(() => {});
+  }, []);
 
-  const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); };
-  const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); };
+  const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); setMenuOpen(false); };
+  const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); setMenuOpen(false); };
   const filteredP = pharmacies.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
-  const filteredD = medications.filter(d =>(activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
+  const filteredD = medications.filter(d => (activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
   const openModal = (drug: any) => { setModal(drug); setMsgText(`Hello, I'd like to confirm the availability of ${drug.name}`); };
-  const getCategoryEmoji = (cat: string) => {
-    const map: Record<string,string> = {
-      'Pain Relief':'💊','Antibiotics':'💉','Malaria':'🦟',
-      'Diabetes':'🩸','Blood Pressure':'❤️','Vitamins':'🌿',
-      'Antacids':'🫃','Allergy':'🤧','Cough & Cold':'🤒',
-      'Antifungal':'🍄','Skin':'🧴','Eye Care':'👁️',
-      'Mental Health':'🧠','Heart':'❤️','Women Health':'👩',
-      'Deworming':'🐛','Digestive':'🫃','Respiratory':'🫁',
-      'Antiviral':'🦠','Wound Care':'🩹','Thyroid':'🦋',
-      'Kidney':'🫘','Supplements':'💪','Sleep':'😴',
-      'Men Health':'👨','Tuberculosis':'🫁','HIV':'🔴',
-      'Antiparasitic':'🐛','Bone Health':'🦴','Steroids':'💉',
-      'Blood Thinners':'🩸','Rehydration':'💧','Dental':'🦷',
-      'Ear Care':'👂','Liver':'🫀',
-    };
-    return map[cat] || '💊';
+
+  const submitForm = async () => {
+    if (!form.name||!form.address||!form.phone||!form.area||!form.email||!form.owner_name) { setFormStatus('error'); return; }
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/pharmacy_submissions`, {
+        method:'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(form),
+      });
+      setFormStatus('success');
+    } catch(e) { setFormStatus('error'); }
   };
 
   return (
     <>
       <style>{S}</style>
       <div className="app">
+
+        {/* NAV */}
         <nav>
-          <div className="logo" onClick={() => setPage("home")}>
+          <div className="logo" onClick={() => { setPage("home"); setMenuOpen(false); }}>
             <div className="logo-fb">HealthBridge</div>
           </div>
           <div className="nav-links">
             <span className="nav-link" onClick={() => setPage("home")}>Home</span>
             <span className="nav-link" onClick={() => goResults("")}>Pharmacies</span>
             <span className="nav-link" onClick={goDrugs}>Medications</span>
-            <span className="nav-link" onClick={() => setPage("about")}>About us</span>
-
-            <span className="nav-link">Help</span>
+            <span className="nav-link" onClick={() => { setPage("about"); setMenuOpen(false); }}>About us</span>
+            <span className="nav-link" onClick={() => { setPage("register"); setMenuOpen(false); }}>List Pharmacy</span>
           </div>
           <div className="nav-right">
             <button className="btn-ghost">Log in</button>
             <button className="btn-signup">Sign up</button>
+            <button style={{background:'none',border:'none',cursor:'pointer',fontSize:22,padding:'4px 8px'}} onClick={() => setMenuOpen(!menuOpen)}>☰</button>
           </div>
         </nav>
 
-        {page==="home" && <>
-          {page==="home" && <>
-  <div className="hero-section">
-    <div className="hero-inner">
-      <div className="hero-badge"><div className="badge-dot"/>Nigeria's Healthcare Navigator</div>
-      <h1>Find your <span>medication</span><br/>near you in minutes</h1>
-      <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
-      <div className="hero-search">
-        <span style={{fontSize:16,marginRight:4}}>🔍</span>
-        <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
-        <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
-      </div>
-      <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
-    </div>
-  </div>
-
-  <div style={{maxWidth:960,margin:'0 auto',padding:'48px 24px',width:'100%'}}>
-
-    <div style={{marginBottom:48}}>
-      <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
-      <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
-      <div style={{fontSize:14,color:'var(--muted)'}}>Everything you need to access healthcare — in one place</div>
-    </div>
-
-    <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch',marginBottom:48}}>
-      {[
-        {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
-        {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
-        {icon:'🗺️',title:'Get Directions',desc:'Get turn-by-turn directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
-        {icon:'📞',title:'Call Directly',desc:'Call any pharmacy with one tap. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
-        {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy directly on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
-        {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy or licensed drug store? Join HealthBridge and reach more patients free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>setPage("register")},
-      ].map(s=>(
-        <div key={s.title} onClick={s.action} style={{minWidth:260,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'28px 22px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,transition:'transform 0.2s',boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
-          <div style={{fontSize:36,marginBottom:14}}>{s.icon}</div>
-          <div style={{fontSize:16,fontWeight:800,marginBottom:8,color:'var(--text)'}}>{s.title}</div>
-          <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
-          <div style={{marginTop:16,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
-        </div>
-      ))}
-    </div>
-
-    <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:16,padding:'36px 28px',marginBottom:48,position:'relative',overflow:'hidden'}}>
-      <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,background:'rgba(255,255,255,0.05)',borderRadius:'50%'}}/>
-      <div style={{fontSize:13,fontWeight:700,color:'#a7f3d0',textTransform:'uppercase',letterSpacing:1,marginBottom:10}}>For pharmacy owners</div>
-      <div style={{fontSize:22,fontWeight:800,color:'#fff',marginBottom:10,lineHeight:1.3}}>Do you own a pharmacy or licensed drug store?</div>
-      <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:24,lineHeight:1.6}}>HealthBridge has got you covered. List your pharmacy for free, reach thousands of patients near you, and grow your business — all from your phone.</div>
-      <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
-        <button onClick={()=>setPage("register")} style={{background:'#fff',color:'var(--primary)',border:'none',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
-        <button onClick={()=>setPage("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
-      </div>
-    </div>
-
-    <div style={{marginBottom:48}}>
-      <div style={{fontSize:22,fontWeight:800,marginBottom:6}}>Frequently Asked Questions</div>
-      <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to know about HealthBridge</div>
-      <div style={{display:'flex',flexDirection:'column',gap:12}}>
-        {[
-          {q:'Is HealthBridge free to use?',a:'Yes! HealthBridge is completely free for patients. You can search for pharmacies and medications at no cost.'},
-          {q:'How do I find a pharmacy near me?',a:'Tap "Find a Pharmacy" or use the search bar on the homepage. You can search by area, street or pharmacy name.'},
-          {q:'How do I know if a pharmacy has my medication?',a:'Tap "Find Medications", search for your drug, then use the WhatsApp button to message the pharmacy directly to confirm availability.'},
-          {q:'How can I list my pharmacy on HealthBridge?',a:'Tap "List Your Pharmacy" and fill in the registration form. Our team will review and verify your pharmacy within 24 hours.'},
-          {q:'Are all pharmacies on HealthBridge verified?',a:'Yes. Every pharmacy listed on HealthBridge goes through our verification process to ensure they are licensed and legitimate.'},
-          {q:'Which areas does HealthBridge cover?',a:'We currently cover Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada and more. We are expanding soon.'},
-        ].map((f,i)=>(
-          <div key={i} style={{background:'var(--card)',borderRadius:12,border:'1.5px solid var(--border)',overflow:'hidden',boxShadow:'var(--shadow)'}}>
-            <div style={{padding:'16px 20px',fontWeight:700,fontSize:14,color:'var(--text)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-              {f.q}<span style={{color:'var(--primary)',fontSize:18}}>+</span>
-            </div>
-            <div style={{padding:'0 20px 16px',fontSize:13,color:'var(--muted)',lineHeight:1.6,borderTop:'1px solid var(--border)',paddingTop:12}}>{f.a}</div>
+        {/* MOBILE MENU */}
+        {menuOpen && (
+          <div className="mobile-menu" style={{display:'flex'}}>
+            <div className="mobile-link" onClick={() => { setPage("home"); setMenuOpen(false); }}>🏠 Home</div>
+            <div className="mobile-link" onClick={() => goResults("")}>🏥 Find Pharmacies</div>
+            <div className="mobile-link" onClick={goDrugs}>💊 Find Medications</div>
+            <div className="mobile-link" onClick={() => { setPage("about"); setMenuOpen(false); }}>ℹ️ About us</div>
+            <div className="mobile-link" onClick={() => { setPage("register"); setMenuOpen(false); }}>🏪 List Your Pharmacy</div>
+            <div className="mobile-link" onClick={() => setMenuOpen(false)}>✕ Close</div>
           </div>
-        ))}
-      </div>
-    </div>
+        )}
 
-    <div style={{background:'var(--card)',borderRadius:16,padding:'36px 28px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center'}}>
-      <div style={{fontSize:22,fontWeight:800,marginBottom:8}}>Ready to find your medication?</div>
-      <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
-      <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
-        <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
-        <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
-      </div>
-    </div>
-
-  </div>
-</>}
-
-
-        {page==="results" && <div className="page-wrap">
-          <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
-          <div className="page-title">Results for pharmacy</div>
-          <div className="page-sub">{filteredP.length} pharmacies found near you</div>
-          <div className="top-search">
-            <input placeholder="🔍  Search pharmacies..." value={resultsQ} onChange={e=>setResultsQ(e.target.value)}/>
-            <button>Search</button>
-          </div>
-          <div className="split-body">
-            <div>
-              <div className="p-list">
-                {filteredP.map(p=>(
-                  <div key={p.id} className="p-card" onClick={()=>{setSelected(p);setPage("detail");}}>
-                    <div className="p-avatar">{p.emoji}</div>
-                    <div className="p-body">
-                      <div className="p-row1"><span className="p-name">{p.name}</span><span className="p-badge">VERIFIED</span></div>
-                      <div className="p-rating"><b>★</b> {p.rating} ({p.reviews} reviews) · 📍 {p.distance}</div>
-                      <div style={{fontSize:11,color:"#64748b"}}>🕐 {p.hours} · <span style={{color:p.open?"#059669":"#dc2626",fontWeight:600}}>{p.open?"● Open":"● Closed"}</span></div>
-                    </div>
-                    <div className="p-btns">
-                      <button className="pb pb-view">View details</button>
-                      <button className="pb pb-wa" onClick={e=>{e.stopPropagation();window.open(`https://wa.me/${p.whatsapp}`,'_blank');}}>💬 WhatsApp</button>
-<button className="pb pb-call" onClick={e=>{e.stopPropagation();window.location.href=`tel:${p.phone}`;}}>📞 Call</button>
-
-                      
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="pagination">
-                <span className="pg-info">Showing 1–{filteredP.length} pharmacies</span>
-                <button className="pg-btn">‹</button>
-                {[1,2,3,4,5].map(n=><button key={n} className={`pg-btn${activePg===n?" active":""}`} onClick={()=>setActivePg(n)}>{n}</button>)}
-                <button className="pg-btn">›</button>
-              </div>
-            </div>
-            <div className="map-wrap">
-              <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <iframe className="map-frame" src={MAP_URL} width="100%" height="380" style={{border:0,display:"block"}} loading="lazy"></iframe>
-            </div>
-          </div>
-        </div>}
-
-        {page==="detail" && selected && <div className="page-wrap">
-          <button className="back-btn" onClick={()=>setPage("results")}>← Back to results</button>
-          <div className="detail-grid">
-            <div>
-              <div className="d-card">
-                <div className="d-header">
-                  <div className="d-avatar">{selected.emoji}</div>
-                  <div>
-                    <div className="d-name">{selected.name}</div>
-                    <div className="d-badge">VERIFIED</div>
-                    <div className="d-addr">📍 {selected.address}</div>
-                  </div>
+        {/* HOME */}
+        {page==="home" && (
+          <>
+            <div className="hero-section">
+              <div className="hero-inner">
+                <div className="hero-badge"><div className="badge-dot"/>Nigeria's Healthcare Navigator</div>
+                <h1>Find your <span>medication</span><br/>near you in minutes</h1>
+                <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
+                <div className="hero-search">
+                  <span style={{fontSize:16,marginRight:4}}>🔍</span>
+                  <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
+                  <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
                 </div>
-                <div className="sec-label">Quick Actions</div>
-                <div className="action-grid">
-                  <button className="act-btn act-wa" onClick={()=>window.open(`https://wa.me/${selected.whatsapp}`,'_blank')}>💬 WhatsApp</button>
-<button className="act-btn act-call" onClick={()=>window.location.href=`tel:${selected.phone}`}>📞 Call</button>
-
-                
-                  <button className="act-btn act-dir">🗺️ Directions</button>
-                  <button className="act-btn act-save">🔖 Save</button>
-                </div>
+                <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
               </div>
-              <div className="d-card">
-                <div className="sec-label">Pharmacy Info</div>
+            </div>
+
+            <div style={{maxWidth:960,margin:'0 auto',padding:'48px 24px',width:'100%'}}>
+
+              <div style={{marginBottom:32}}>
+                <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
+                <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
+                <div style={{fontSize:14,color:'var(--muted)'}}>Everything you need to access healthcare — in one place</div>
+              </div>
+
+              <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch' as any,marginBottom:48}}>
                 {[
-                  {ico:"📞",lbl:"Phone",val:selected.phone},
-                  {ico:"📍",lbl:"Address",val:selected.address},
-                  {ico:"🕐",lbl:"Opening Hours",val:selected.hours},
-                  {ico:"⭐",lbl:"Rating",val:`${selected.rating} (${selected.reviews} reviews)`},
-                  {ico:"📏",lbl:"Distance",val:`${selected.distance} away`},
-                ].map(r=>(
-                  <div key={r.lbl} className="info-row">
-                    <span className="i-ico">{r.ico}</span>
-                    <div><div className="i-lbl">{r.lbl}</div><div className="i-val">{r.val}</div></div>
+                  {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
+                  {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
+                  {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
+                  {icon:'📞',title:'Call Directly',desc:'Call any pharmacy with one tap. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
+                  {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
+                  {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy or licensed drug store? Join HealthBridge free and reach more patients.',color:'#fdf4ff',border:'#d8b4fe',action:()=>setPage("register")},
+                ].map(s=>(
+                  <div key={s.title} onClick={s.action} style={{minWidth:260,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'28px 22px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
+                    <div style={{fontSize:36,marginBottom:14}}>{s.icon}</div>
+                    <div style={{fontSize:16,fontWeight:800,marginBottom:8,color:'var(--text)'}}>{s.title}</div>
+                    <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
+                    <div style={{marginTop:16,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
                   </div>
                 ))}
               </div>
+
+              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:16,padding:'36px 28px',marginBottom:48,position:'relative',overflow:'hidden'}}>
+                <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,background:'rgba(255,255,255,0.05)',borderRadius:'50%'}}/>
+                <div style={{fontSize:13,fontWeight:700,color:'#a7f3d0',textTransform:'uppercase' as any,letterSpacing:1,marginBottom:10}}>For pharmacy owners</div>
+                <div style={{fontSize:22,fontWeight:800,color:'#fff',marginBottom:10,lineHeight:1.3}}>Do you own a pharmacy or licensed drug store?</div>
+                <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:24,lineHeight:1.6}}>HealthBridge has got you covered. List your pharmacy for free, reach thousands of patients near you, and grow your business — all from your phone.</div>
+                <div style={{display:'flex',gap:12,flexWrap:'wrap' as any}}>
+                  <button onClick={()=>setPage("register")} style={{background:'#fff',color:'var(--primary)',border:'none',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+                  <button onClick={()=>setPage("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
+                </div>
+              </div>
+
+              <div style={{marginBottom:48}}>
+                <div style={{fontSize:22,fontWeight:800,marginBottom:6}}>Frequently Asked Questions</div>
+                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to know about HealthBridge</div>
+                <div style={{display:'flex',flexDirection:'column' as any,gap:12}}>
+                  {[
+                    {q:'Is HealthBridge free to use?',a:'Yes! HealthBridge is completely free for patients. You can search for pharmacies and medications at no cost.'},
+                    {q:'How do I find a pharmacy near me?',a:'Tap "Find a Pharmacy" or use the search bar on the homepage. You can search by area, street or pharmacy name.'},
+                    {q:'How do I know if a pharmacy has my medication?',a:'Tap "Find Medications", search for your drug, then use the WhatsApp button to message the pharmacy directly to confirm availability.'},
+                    {q:'How can I list my pharmacy on HealthBridge?',a:'Tap "List Your Pharmacy" and fill in the registration form. Our team will review and verify your pharmacy within 24 hours.'},
+                    {q:'Are all pharmacies on HealthBridge verified?',a:'Yes. Every pharmacy listed on HealthBridge goes through our verification process to ensure they are licensed and legitimate.'},
+                    {q:'Which areas does HealthBridge cover?',a:'We currently cover Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada and more. We are expanding soon.'},
+                  ].map((f,i)=>(
+                    <div key={i} style={{background:'var(--card)',borderRadius:12,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
+                      <div style={{padding:'16px 20px',fontWeight:700,fontSize:14,color:'var(--text)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                        {f.q}<span style={{color:'var(--primary)',fontSize:18,flexShrink:0,marginLeft:8}}>+</span>
+                      </div>
+                      <div style={{padding:'12px 20px 16px',fontSize:13,color:'var(--muted)',lineHeight:1.6,borderTop:'1px solid var(--border)'}}>{f.a}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{background:'var(--card)',borderRadius:16,padding:'36px 28px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center' as any}}>
+                <div style={{fontSize:22,fontWeight:800,marginBottom:8}}>Ready to find your medication?</div>
+                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
+                <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap' as any}}>
+                  <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
+                  <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+                </div>
+              </div>
+
             </div>
-            <div>
-              <iframe className="d-map-frame" src={MAP_URL} width="100%" height="200" style={{border:0,display:"block"}} loading="lazy"></iframe>
-              <div className="d-card">
-                <div className="sec-label">About this pharmacy</div>
-                <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:16}}>Verified and licensed pharmacy serving residents with genuine medications and professional healthcare services.</p>
-                <button className="act-btn act-wa" style={{width:"100%",marginBottom:8}}>💬 Chat on WhatsApp</button>
-                <button className="act-btn act-call" style={{width:"100%"}}>📞 Call Pharmacy</button>
+          </>
+        )}
+
+        {/* RESULTS */}
+        {page==="results" && (
+          <div className="page-wrap">
+            <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+            <div className="page-title">Find a Pharmacy</div>
+            <div className="page-sub">{filteredP.length} pharmacies found near you</div>
+            <div className="top-search">
+              <input placeholder="🔍  Search by name or area..." value={resultsQ} onChange={e=>setResultsQ(e.target.value)}/>
+              <button>Search</button>
+            </div>
+            <div className="split-body">
+              <div>
+                <div className="p-list">
+                  {filteredP.map(p=>(
+                    <div key={p.id} className="p-card" onClick={()=>{setSelected(p);setPage("detail");}}>
+                      <div className="p-avatar">{p.emoji}</div>
+                      <div className="p-body">
+                        <div className="p-row1"><span className="p-name">{p.name}</span><span className="p-badge">VERIFIED</span></div>
+                        <div className="p-rating"><b>★</b> {p.rating} ({p.reviews} reviews) · 📍 {p.distance}</div>
+                        <div style={{fontSize:11,color:"#64748b"}}>🕐 {p.hours} · <span style={{color:p.open?"#059669":"#dc2626",fontWeight:600}}>{p.open?"● Open":"● Closed"}</span></div>
+                      </div>
+                      <div className="p-btns">
+                        <button className="pb pb-view">View</button>
+                        <button className="pb pb-wa" onClick={e=>{e.stopPropagation();window.open(`https://wa.me/${p.whatsapp}`,'_blank');}}>💬 WhatsApp</button>
+                        <button className="pb pb-call" onClick={e=>{e.stopPropagation();window.location.href=`tel:${p.phone}`;}}>📞 Call</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="pagination">
+                  <span className="pg-info">Showing 1–{filteredP.length} pharmacies</span>
+                  <button className="pg-btn">‹</button>
+                  {[1,2,3,4,5].map(n=><button key={n} className={`pg-btn${activePg===n?" active":""}`} onClick={()=>setActivePg(n)}>{n}</button>)}
+                  <button className="pg-btn">›</button>
+                </div>
+              </div>
+              <div className="map-wrap">
+                <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
+                <iframe className="map-frame" src={MAP_URL} loading="lazy"></iframe>
               </div>
             </div>
           </div>
-        </div>}
-{page==="register" && <div className="page-wrap">
-  <button className="back-btn" onClick={()=>setPage("about")}>← Back</button>
-  <div className="page-title">List Your Pharmacy Free</div>
-  <div className="page-sub">Join 50+ verified pharmacies on HealthBridge and reach thousands of patients near you</div>
-  <div style={{background:'var(--card)',borderRadius:'var(--radius)',padding:24,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
-    {formStatus==='success' ? (
-      <div style={{textAlign:'center',padding:'40px 20px'}}>
-        <div style={{fontSize:48,marginBottom:16}}>🎉</div>
-        <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>Application Submitted!</div>
-        <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>We will review your application and get back to you within 24 hours.</div>
-        <button onClick={()=>{setPage("home");setFormStatus('');}} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Back to Home</button>
-      </div>
-    ) : (
-      <div style={{display:'flex',flexDirection:'column',gap:16}}>
-        {[
-          {label:'Pharmacy Name *',key:'name',placeholder:'e.g. Lifecare Pharmacy'},
-          {label:'Owner Name *',key:'owner_name',placeholder:'Your full name'},
-          {label:'Email Address *',key:'email',placeholder:'your@email.com'},
-          {label:'Phone Number *',key:'phone',placeholder:'08012345678'},
-          {label:'WhatsApp Number',key:'whatsapp',placeholder:'2348012345678'},
-          {label:'Full Address *',key:'address',placeholder:'e.g. 14 Broad Street, Lagos Island'},
-          {label:'Opening Hours *',key:'opening_hours',placeholder:'e.g. 8:00am - 10:00pm or 24 Hours'},
-        ].map(f=>(
-          <div key={f.key}>
-            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:'var(--text)'}}>{f.label}</div>
-            <input
-              value={form[f.key as keyof typeof form]}
-              onChange={e=>setForm({...form,[f.key]:e.target.value})}
-              placeholder={f.placeholder}
-              style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}
-            />
-          </div>
-        ))}
-        <div>
-          <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Area *</div>
-          <select
-            value={form.area}
-            onChange={e=>setForm({...form,area:e.target.value})}
-            style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)',background:'white'}}
-          >
-            <option value="">Select area</option>
-            {['Lagos Island','Ikeja','Lekki','Victoria Island','Surulere','Yaba','Shomolu','Bariga','Gbagada','Ikoyi','Apapa','Ajah','Festac','Isolo','Mushin','Oshodi','Agege','Alimosho','Ikorodu','Epe'].map(a=>(
-              <option key={a} value={a}>{a}</option>
-            ))}
-          </select>
-        </div>
-        {formStatus==='error' && <div style={{background:'#fee2e2',color:'#dc2626',padding:'12px 16px',borderRadius:'var(--radius-sm)',fontSize:13,fontWeight:500}}>Please fill in all required fields</div>}
-        <button
-          onClick={async()=>{
-            if(!form.name||!form.address||!form.phone||!form.area||!form.email||!form.owner_name){
-              setFormStatus('error');return;
-            }
-            try{
-              await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/pharmacy_submissions`,{
-                method:'POST',
-                headers:{
-                  'apikey':process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY||'',
-                  'Authorization':`Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY||''}`,
-                  'Content-Type':'application/json',
-                  'Prefer':'return=minimal',
-                },
-                body:JSON.stringify(form),
-              });
-              setFormStatus('success');
-            }catch(e){
-              setFormStatus('error');
-            }
-          }}
-          style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'14px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif',width:'100%',marginTop:8}}
-        >Submit Application →</button>
-        <div style={{fontSize:12,color:'var(--muted)',textAlign:'center'}}>By submitting you agree to our terms. Listing is completely free.</div>
-      </div>
-    )}
-  </div>
-</div>}
-{page==="about" && <div>
-  <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
-    <div style={{maxWidth:680,margin:'0 auto',textAlign:'center',position:'relative',zIndex:1}}>
-      <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
-      <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
-      <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
-    </div>
-  </div>
-  <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
-    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:20,marginBottom:48}}>
-      {[
-        {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies near them — in seconds.'},
-        {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away and every medication is accessible.'},
-        {icon:'💡',title:'Our Story',desc:'HealthBridge was born from a simple frustration — spending hours searching for a pharmacy that had the right medication. We built the solution we wished existed.'},
-        {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and we never charge users for finding healthcare.'},
-      ].map(s=>(
-        <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'24px 20px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
-          <div style={{fontSize:32,marginBottom:12}}>{s.icon}</div>
-          <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>{s.title}</div>
-          <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
-        </div>
-      ))}
-    </div>
-    <div style={{background:'#fff',borderRadius:12,padding:'32px 24px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)',marginBottom:24,textAlign:'center'}}>
-      <div style={{fontSize:18,fontWeight:800,marginBottom:20}}>HealthBridge by the numbers</div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:16}}>
-        {[
-          {n:'50+',l:'Verified Pharmacies'},
-          {n:'6+',l:'Lagos Areas'},
-          {n:'24/7',l:'Always Available'},
-          {n:'Free',l:'Always Free to Use'},
-        ].map(s=>(
-          <div key={s.l} style={{padding:'16px 8px',background:'#f0fafb',borderRadius:10}}>
-            <div style={{fontSize:24,fontWeight:800,color:'#0891b2'}}>{s.n}</div>
-            <div style={{fontSize:12,color:'#64748b',marginTop:4}}>{s.l}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-    <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center'}}>
-      <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
-      <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
-      <button onClick={() => setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+        )}
 
-    </div>
-  </div>
-</div>}
-
-        {page==="drugs" && <div className="page-wrap">
-          <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
-          <div className="page-title">Find your medication</div>
-          <div className="page-sub">Search for drugs available at pharmacies near you</div>
-          <div className="top-search">
-            <input placeholder="🔍  Search medications..." value={drugsQ} onChange={e=>setDrugsQ(e.target.value)}/>
-            <button>Search</button>
-          </div>
-          <div className="filter-pills">
-            {CATS.map(c=><button key={c} className={`pill${activeCat===c?" on":""}`} onClick={()=>setActiveCat(c)}>{c}</button>)}
-          </div>
-          <div className="split-body">
-            <div className="drug-list">
-              {filteredD.map(d=>(
-                <div key={d.id} className="drug-card">
-                  <div className="drug-img">{d.emoji}</div>
-                  <div className="drug-body">
-                    <div className="drug-name">{d.name}</div>
-                    <div className="drug-type">{d.type}</div>
-                    <div className="drug-tags">
-                      <span className="dtag dtag-avail">● Available</span>
-                      <span className="dtag dtag-price">{d.price}</span>
+        {/* DETAIL */}
+        {page==="detail" && selected && (
+          <div className="page-wrap">
+            <button className="back-btn" onClick={()=>setPage("results")}>← Back to results</button>
+            <div className="detail-grid">
+              <div>
+                <div className="d-card">
+                  <div className="d-header">
+                    <div className="d-avatar">{selected.emoji}</div>
+                    <div>
+                      <div className="d-name">{selected.name}</div>
+                      <div className="d-badge">VERIFIED</div>
+                      <div className="d-addr">📍 {selected.address}</div>
                     </div>
                   </div>
-                  <button className="drug-wa-btn" onClick={()=>openModal(d)}>💬 WhatsApp</button>
+                  <div className="sec-label">Quick Actions</div>
+                  <div className="action-grid">
+                    <button className="act-btn act-wa" onClick={()=>window.open(`https://wa.me/${selected.whatsapp}`,'_blank')}>💬 WhatsApp</button>
+                    <button className="act-btn act-call" onClick={()=>window.location.href=`tel:${selected.phone}`}>📞 Call</button>
+                    <button className="act-btn act-dir">🗺️ Directions</button>
+                    <button className="act-btn act-save">🔖 Save</button>
+                  </div>
                 </div>
-              ))}
-            </div>
-            <div className="map-wrap">
-              <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-              <iframe className="map-frame" src={MAP_URL} width="100%" height="380" style={{border:0,display:"block"}} loading="lazy"></iframe>
-            </div>
-          </div>
-        </div>}
-
-        {modal && <div className="overlay" onClick={()=>setModal(null)}>
-          <div className="modal" onClick={e=>e.stopPropagation()}>
-            <div className="modal-head">
-              <div><div className="modal-title">Chat with {selected?.name || "pharmacy"}</div></div>
-              <button className="modal-x" onClick={()=>setModal(null)}>✕</button>
-            </div>
-            <div className="modal-sub">You are about to contact this pharmacy on WhatsApp</div>
-            <div className="modal-drug">
-              <div className="modal-drug-img">{modal.emoji}</div>
+                <div className="d-card">
+                  <div className="sec-label">Pharmacy Info</div>
+                  {[
+                    {ico:"📞",lbl:"Phone",val:selected.phone},
+                    {ico:"📍",lbl:"Address",val:selected.address},
+                    {ico:"🕐",lbl:"Opening Hours",val:selected.hours},
+                    {ico:"⭐",lbl:"Rating",val:`${selected.rating} (${selected.reviews} reviews)`},
+                    {ico:"📏",lbl:"Distance",val:`${selected.distance} away`},
+                  ].map(r=>(
+                    <div key={r.lbl} className="info-row">
+                      <span className="i-ico">{r.ico}</span>
+                      <div><div className="i-lbl">{r.lbl}</div><div className="i-val">{r.val}</div></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div>
-                <div className="modal-drug-name">{modal.name}</div>
-                <div className="modal-drug-info">{modal.type} · Qty: 1</div>
+                <iframe className="d-map-frame" src={MAP_URL} loading="lazy"></iframe>
+                <div className="d-card">
+                  <div className="sec-label">About this pharmacy</div>
+                  <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:16}}>Verified and licensed pharmacy serving residents with genuine medications and professional healthcare services.</p>
+                  <button className="act-btn act-wa" style={{width:"100%",marginBottom:8}} onClick={()=>window.open(`https://wa.me/${selected.whatsapp}`,'_blank')}>💬 Chat on WhatsApp</button>
+                  <button className="act-btn act-call" style={{width:"100%"}} onClick={()=>window.location.href=`tel:${selected.phone}`}>📞 Call Pharmacy</button>
+                </div>
               </div>
             </div>
-            <div className="modal-lbl">Your message (editable)</div>
-            <textarea className="modal-ta" rows={3} value={msgText} onChange={e=>setMsgText(e.target.value)}/>
-            <button className="modal-wa">💬 Continue to Whatsapp</button>
-            <button className="modal-cancel" onClick={()=>setModal(null)}>Cancel</button>
           </div>
-        </div>}
+        )}
+
+        {/* DRUGS */}
+        {page==="drugs" && (
+          <div className="page-wrap">
+            <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+            <div className="page-title">Find your medication</div>
+            <div className="page-sub">Search for drugs available at pharmacies near you</div>
+            <div className="top-search">
+              <input placeholder="🔍  Search medications..." value={drugsQ} onChange={e=>setDrugsQ(e.target.value)}/>
+              <button>Search</button>
+            </div>
+            <div className="filter-pills">
+              {CATS.map(c=><button key={c} className={`pill${activeCat===c?" on":""}`} onClick={()=>setActiveCat(c)}>{c}</button>)}
+            </div>
+            <div className="split-body">
+              <div className="drug-list">
+                {filteredD.map(d=>(
+                  <div key={d.id} className="drug-card">
+                    <div className="drug-img">{d.emoji}</div>
+                    <div className="drug-body">
+                      <div className="drug-name">{d.name}</div>
+                      <div className="drug-type">{d.type}</div>
+                      <div className="drug-tags">
+                        <span className="dtag dtag-avail">● Available</span>
+                        <span className="dtag dtag-price">{d.price}</span>
+                      </div>
+                    </div>
+                    <button className="drug-wa-btn" onClick={()=>openModal(d)}>💬 WhatsApp</button>
+                  </div>
+                ))}
+              </div>
+              <div className="map-wrap">
+                <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
+                <iframe className="map-frame" src={MAP_URL} loading="lazy"></iframe>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ABOUT */}
+        {page==="about" && (
+          <div>
+            <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
+              <div style={{maxWidth:680,margin:'0 auto',textAlign:'center' as any,position:'relative',zIndex:1}}>
+                <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
+                <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
+                <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
+              </div>
+            </div>
+            <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
+              <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:20,marginBottom:48}}>
+                {[
+                  {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies near them — in seconds.'},
+                  {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away and every medication is accessible.'},
+                  {icon:'💡',title:'Our Story',desc:'HealthBridge was born from a simple frustration — spending hours searching for a pharmacy that had the right medication. We built the solution we wished existed.'},
+                  {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and we never charge users for finding healthcare.'},
+                ].map(s=>(
+                  <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'24px 20px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
+                    <div style={{fontSize:32,marginBottom:12}}>{s.icon}</div>
+                    <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>{s.title}</div>
+                    <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center' as any}}>
+                <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
+                <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
+                <button onClick={()=>setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* REGISTER */}
+        {page==="register" && (
+          <div className="page-wrap">
+            <button className="back-btn" onClick={()=>setPage("about")}>← Back</button>
+            <div className="page-title">List Your Pharmacy Free</div>
+            <div className="page-sub">Join verified pharmacies on HealthBridge and reach thousands of patients near you</div>
+            <div style={{background:'var(--card)',borderRadius:'var(--radius)',padding:24,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
+              {formStatus==='success' ? (
+                <div style={{textAlign:'center' as any,padding:'40px 20px'}}>
+                  <div style={{fontSize:48,marginBottom:16}}>🎉</div>
+                  <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>Application Submitted!</div>
+                  <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>We will review your application and get back to you within 24 hours.</div>
+                  <button onClick={()=>{setPage("home");setFormStatus('');}} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Back to Home</button>
+                </div>
+              ) : (
+                <div style={{display:'flex',flexDirection:'column' as any,gap:16}}>
+                  {[
+                    {label:'Pharmacy Name *',key:'name',placeholder:'e.g. Lifecare Pharmacy'},
+                    {label:'Owner Name *',key:'owner_name',placeholder:'Your full name'},
+                    {label:'Email Address *',key:'email',placeholder:'your@email.com'},
+                    {label:'Phone Number *',key:'phone',placeholder:'08012345678'},
+                    {label:'WhatsApp Number',key:'whatsapp',placeholder:'2348012345678'},
+                    {label:'Full Address *',key:'address',placeholder:'e.g. 14 Broad Street, Lagos Island'},
+                    {label:'Opening Hours *',key:'opening_hours',placeholder:'e.g. 8:00am - 10:00pm or 24 Hours'},
+                  ].map(f=>(
+                    <div key={f.key}>
+                      <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>{f.label}</div>
+                      <input
+                        value={form[f.key as keyof typeof form]}
+                        onChange={e=>setForm({...form,[f.key]:e.target.value})}
+                        placeholder={f.placeholder}
+                        style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}
+                      />
+                    </div>
+                  ))}
+                  <div>
+                    <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Area *</div>
+                    <select value={form.area} onChange={e=>setForm({...form,area:e.target.value})} style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)',background:'white'}}>
+                      <option value="">Select area</option>
+                      {['Lagos Island','Ikeja','Lekki','Victoria Island','Surulere','Yaba','Shomolu','Bariga','Gbagada','Ikoyi','Apapa','Ajah','Festac','Isolo','Mushin','Oshodi','Agege','Alimosho','Ikorodu','Epe'].map(a=>(
+                        <option key={a} value={a}>{a}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {formStatus==='error' && <div style={{background:'#fee2e2',color:'#dc2626',padding:'12px 16px',borderRadius:'var(--radius-sm)',fontSize:13,fontWeight:500}}>Please fill in all required fields</div>}
+                  <button onClick={submitForm} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'14px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif',width:'100%',marginTop:8}}>Submit Application →</button>
+                  <div style={{fontSize:12,color:'var(--muted)',textAlign:'center' as any}}>By submitting you agree to our terms. Listing is completely free.</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* WHATSAPP MODAL */}
+        {modal && (
+          <div className="overlay" onClick={()=>setModal(null)}>
+            <div className="modal" onClick={e=>e.stopPropagation()}>
+              <div className="modal-head">
+                <div><div className="modal-title">Chat with pharmacy</div></div>
+                <button className="modal-x" onClick={()=>setModal(null)}>✕</button>
+              </div>
+              <div className="modal-sub">You are about to contact this pharmacy on WhatsApp</div>
+              <div className="modal-drug">
+                <div className="modal-drug-img">{modal.emoji}</div>
+                <div>
+                  <div className="modal-drug-name">{modal.name}</div>
+                  <div className="modal-drug-info">{modal.type} · Qty: 1</div>
+                </div>
+              </div>
+              <div className="modal-lbl">Your message (editable)</div>
+              <textarea className="modal-ta" rows={3} value={msgText} onChange={e=>setMsgText(e.target.value)}/>
+              <button className="modal-wa" onClick={()=>window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(msgText)}`,'_blank')}>💬 Continue to Whatsapp</button>
+              <button className="modal-cancel" onClick={()=>setModal(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
+
       </div>
     </>
   );
