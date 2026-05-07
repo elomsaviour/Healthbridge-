@@ -493,38 +493,93 @@ export default function Home() {
 
         {/* ABOUT */}
         {page==="about" && (
-          <div>
-            <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
-              <div style={{maxWidth:680,margin:'0 auto',textAlign:'center' as any,position:'relative',zIndex:1}}>
-                <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
-                <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
-                <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
-              </div>
-            </div>
-            <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
-              <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
-              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:20,marginBottom:48}}>
-                {[
-                  {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies near them — in seconds.'},
-                  {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away and every medication is accessible.'},
-                  {icon:'💡',title:'Our Story',desc:'HealthBridge was born from a simple frustration — spending hours searching for a pharmacy that had the right medication. We built the solution we wished existed.'},
-                  {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and we never charge users for finding healthcare.'},
-                ].map(s=>(
-                  <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'24px 20px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
-                    <div style={{fontSize:32,marginBottom:12}}>{s.icon}</div>
-                    <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>{s.title}</div>
-                    <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center' as any}}>
-                <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
-                <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
-                <button onClick={()=>setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
-              </div>
-            </div>
+  <div>
+    <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
+      <div style={{maxWidth:680,margin:'0 auto',textAlign:'center' as any,position:'relative',zIndex:1}}>
+        <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
+        <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
+        <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
+      </div>
+    </div>
+    <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
+      <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+
+      <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase' as any,letterSpacing:1,marginBottom:8}}>Who we are</div>
+      <div style={{fontSize:22,fontWeight:800,marginBottom:16}}>About HealthBridge</div>
+      <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:24}}>
+        <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8,marginBottom:16}}>HealthBridge is a Nigerian health-tech startup on a mission to make healthcare accessible for every Nigerian. We connect patients with verified, licensed pharmacies near them — making it easy to find medications, get directions, and contact pharmacies directly.</p>
+        <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8,marginBottom:16}}>We were built from a simple frustration — spending hours searching for a pharmacy that had the right medication. HealthBridge is the solution we wished existed.</p>
+        <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8}}>We are starting in Lagos and expanding across Nigeria. Every pharmacy on HealthBridge is verified and licensed, so you can trust what you find.</p>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:16,marginBottom:48}}>
+        {[
+          {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies — in seconds.'},
+          {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away.'},
+          {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and never charge users.'},
+          {icon:'🚀',title:'Our Goal',desc:'To be the most trusted pharmacy finder in Nigeria, starting from Lagos and expanding nationwide.'},
+        ].map(s=>(
+          <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'22px 18px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
+            <div style={{fontSize:30,marginBottom:10}}>{s.icon}</div>
+            <div style={{fontSize:14,fontWeight:700,marginBottom:6}}>{s.title}</div>
+            <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
           </div>
-        )}
+        ))}
+      </div>
+
+      <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:48}}>
+        <div style={{fontSize:18,fontWeight:800,marginBottom:20,textAlign:'center' as any}}>What we offer</div>
+        <div style={{display:'flex',flexDirection:'column' as any,gap:14}}>
+          {[
+            {icon:'🏥',title:'Find Pharmacies',desc:'Search verified pharmacies near you by name, area or street.'},
+            {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and find which pharmacies have them in stock.'},
+            {icon:'💬',title:'WhatsApp Pharmacies',desc:'Message any pharmacy directly on WhatsApp to confirm availability before visiting.'},
+            {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No middleman, no stress.'},
+            {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy from your current location.'},
+            {icon:'🏪',title:'List Your Pharmacy',desc:'Pharmacy owners can list their pharmacy for free and reach more patients.'},
+          ].map(s=>(
+            <div key={s.title} style={{display:'flex',gap:14,alignItems:'flex-start',padding:'14px 0',borderBottom:'1px solid var(--border)'}}>
+              <div style={{fontSize:24,flexShrink:0}}>{s.icon}</div>
+              <div>
+                <div style={{fontSize:14,fontWeight:700,marginBottom:3}}>{s.title}</div>
+                <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.5}}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{fontSize:22,fontWeight:800,marginBottom:6}}>Frequently Asked Questions</div>
+      <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to know about HealthBridge</div>
+      <div style={{display:'flex',flexDirection:'column' as any,gap:12,marginBottom:48}}>
+        {[
+          {q:'Is HealthBridge free to use?',a:'Yes! HealthBridge is completely free for patients. You can search for pharmacies and medications at no cost.'},
+          {q:'How do I find a pharmacy near me?',a:'Tap "Find a Pharmacy" or use the search bar on the homepage. You can search by area, street or pharmacy name.'},
+          {q:'How do I know if a pharmacy has my medication?',a:'Tap "Find Medications", search for your drug, then use the WhatsApp button to message the pharmacy directly to confirm availability.'},
+          {q:'How can I list my pharmacy on HealthBridge?',a:'Tap "List Your Pharmacy" and fill in the registration form. Our team will review and verify your pharmacy within 24 hours.'},
+          {q:'Are all pharmacies on HealthBridge verified?',a:'Yes. Every pharmacy listed on HealthBridge goes through our verification process to ensure they are licensed and legitimate.'},
+          {q:'Which areas does HealthBridge cover?',a:'We currently cover Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada and more. We are expanding soon.'},
+          {q:'How do I contact HealthBridge?',a:'You can reach us via WhatsApp or email. We are available Monday to Saturday, 8am to 8pm.'},
+          {q:'Can I trust the pharmacies listed on HealthBridge?',a:'Yes. All pharmacies on HealthBridge are verified and licensed by the Pharmaceutical Council of Nigeria (PCN).'},
+        ].map((f,i)=>(
+          <div key={i} style={{background:'var(--card)',borderRadius:12,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
+            <div style={{padding:'16px 20px',fontWeight:700,fontSize:14,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              {f.q}<span style={{color:'var(--primary)',fontSize:18,flexShrink:0,marginLeft:8}}>+</span>
+            </div>
+            <div style={{padding:'12px 20px 16px',fontSize:13,color:'var(--muted)',lineHeight:1.6,borderTop:'1px solid var(--border)'}}>{f.a}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center' as any}}>
+        <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
+        <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
+        <button onClick={()=>setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+      </div>
+    </div>
+  </div>
+)}
+
 
         {/* REGISTER */}
         {page==="register" && (
