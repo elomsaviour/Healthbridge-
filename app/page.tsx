@@ -289,16 +289,14 @@ export default function Home() {
                 <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
                   <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
                 <button>   ← login button opens
-  {authLoading?'Please wait...': 'Login'}
-</button>  ← login button closes HERE
+   <button onClick={handleLogin}>
+  {authLoading ? 'Please wait...' : 'Login'}
+</button>
 
-← paste Google button code here
-
-<div style={{textAlign:'center'...  ← existing line
-
-                   <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+<div style={{ textAlign: 'center' }}>  
+  <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
                   
-                </div>
+                   </div>
               </div>
 
               <div style={{marginBottom:24}}>
