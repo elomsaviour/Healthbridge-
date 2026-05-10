@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useEffect } from “react”;
+
+
+import { useState, useEffect } from 'react';
 
 const S = `
-@import url(‘https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap’);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+`;
+
 
 - { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
