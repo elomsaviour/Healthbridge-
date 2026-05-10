@@ -307,8 +307,7 @@ return (
 
     <div style={{maxWidth:960,margin:'0 auto',padding:'48px 24px',width:'100%'}}>
 
-      <div style={{background:'var(--card)',borderRadius:16,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center' as any,marginBottom:32}}>
-        <div style={{fontSize:20,fontWeight:800,marginBottom:6}}>Ready to find your medication?</div>
+      
         <div style={{fontSize:14,color:'var(--muted)',marginBottom:20}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
         <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap' as any}}>
           <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
