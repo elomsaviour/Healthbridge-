@@ -332,10 +332,7 @@ export default function Home() {
                   <button onClick={()=>nav("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
                 </div>
               </div>
-
-            </div>
-          </>
-        )}
+           )}
 
         {page==="results" && (
           <div className="page-wrap">
