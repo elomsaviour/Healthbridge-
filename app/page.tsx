@@ -296,8 +296,8 @@ export default function Home() {
 <div style={{ textAlign: 'center' }}>  
   <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
                   
-                   </div>
-              </div>
+               </div>
+              
 
               <div style={{marginBottom:24}}>
                 <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
