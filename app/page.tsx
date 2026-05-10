@@ -197,7 +197,6 @@ export default function Home() {
         })));
       }
     }).catch(() => {});
-
     fetch(`${SUPABASE_URL}/rest/v1/medications?select=*&order=name.asc`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     }).then(r => r.json()).then(data => {
@@ -213,8 +212,9 @@ export default function Home() {
     }).catch(() => {});
   }, []);
 
-  const goResults = (q: string) => { setResultsQ(q||""); setPage("results"); setMenuOpen(false); };
-  const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); setPage("drugs"); setMenuOpen(false); };
+  const nav = (p: string) => { setPage(p); setMenuOpen(false); };
+  const goResults = (q: string) => { setResultsQ(q||""); nav("results"); };
+  const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); nav("drugs"); };
   const filteredP = pharmacies.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
   const filteredD = medications.filter(d => (activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
   const openModal = (drug: any) => { setModal(drug); setMsgText(`Hello, I'd like to confirm the availability of ${drug.name}`); };
@@ -236,38 +236,35 @@ export default function Home() {
       <style>{S}</style>
       <div className="app">
 
-        {/* NAV */}
         <nav>
-          <div className="logo" onClick={() => { setPage("home"); setMenuOpen(false); }}>
+          <div className="logo" onClick={() => nav("home")}>
             <div className="logo-fb">HealthBridge</div>
           </div>
           <div className="nav-links">
-            <span className="nav-link" onClick={() => setPage("home")}>Home</span>
+            <span className="nav-link" onClick={() => nav("home")}>Home</span>
             <span className="nav-link" onClick={() => goResults("")}>Pharmacies</span>
             <span className="nav-link" onClick={goDrugs}>Medications</span>
-            <span className="nav-link" onClick={() => { setPage("about"); setMenuOpen(false); }}>About us</span>
-            <span className="nav-link" onClick={() => { setPage("register"); setMenuOpen(false); }}>List Pharmacy</span>
+            <span className="nav-link" onClick={() => nav("about")}>About us</span>
+            <span className="nav-link" onClick={() => nav("register")}>List Pharmacy</span>
           </div>
           <div className="nav-right">
             <button className="btn-ghost">Log in</button>
             <button className="btn-signup">Sign up</button>
-            <button style={{background:'none',border:'none',cursor:'pointer',fontSize:22,padding:'4px 8px'}} onClick={() => setMenuOpen(!menuOpen)}>☰</button>
+            <button style={{background:'none',border:'none',cursor:'pointer',fontSize:22,padding:'4px 8px',color:'var(--primary)'}} onClick={() => setMenuOpen(!menuOpen)}>☰</button>
           </div>
         </nav>
 
-        {/* MOBILE MENU */}
         {menuOpen && (
           <div className="mobile-menu" style={{display:'flex'}}>
-            <div className="mobile-link" onClick={() => { setPage("home"); setMenuOpen(false); }}>🏠 Home</div>
+            <div className="mobile-link" onClick={() => nav("home")}>🏠 Home</div>
             <div className="mobile-link" onClick={() => goResults("")}>🏥 Find Pharmacies</div>
             <div className="mobile-link" onClick={goDrugs}>💊 Find Medications</div>
-            <div className="mobile-link" onClick={() => { setPage("about"); setMenuOpen(false); }}>ℹ️ About us</div>
-            <div className="mobile-link" onClick={() => { setPage("register"); setMenuOpen(false); }}>🏪 List Your Pharmacy</div>
+            <div className="mobile-link" onClick={() => nav("about")}>ℹ️ About us</div>
+            <div className="mobile-link" onClick={() => nav("register")}>🏪 List Your Pharmacy</div>
             <div className="mobile-link" onClick={() => setMenuOpen(false)}>✕ Close</div>
           </div>
         )}
 
-        {/* HOME */}
         {page==="home" && (
           <>
             <div className="hero-section">
@@ -284,81 +281,48 @@ export default function Home() {
               </div>
             </div>
 
-            </div>
+            <div style={{maxWidth:960,margin:'0 auto',padding:'32px 24px',width:'100%'}}>
 
-    <div style={{maxWidth:960,margin:'0 auto',padding:'48px 24px',width:'100%'}}>
-
-      <div style={{background:'var(--card)',borderRadius:16,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center' as any,marginBottom:32}}>
-        <div style={{fontSize:20,fontWeight:800,marginBottom:6}}>Ready to find your medication?</div>
-        <div style={{fontSize:14,color:'var(--muted)',marginBottom:20}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
-        <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap' as any}}>
-          <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
-          <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
-        </div>
-      </div>
-
-      <div style={{marginBottom:32}}>
-        <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
-                <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
-                <div style={{fontSize:14,color:'var(--muted)'}}>Everything you need to access healthcare — in one place</div>
-              </div>
-
-              <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch' as any,marginBottom:48}}>
-                {[
-                  {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
-                  {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
-                  {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
-                  {icon:'📞',title:'Call Directly',desc:'Call any pharmacy with one tap. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
-                  {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
-                  {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy or licensed drug store? Join HealthBridge free and reach more patients.',color:'#fdf4ff',border:'#d8b4fe',action:()=>setPage("register")},
-                ].map(s=>(
-                  <div key={s.title} onClick={s.action} style={{minWidth:260,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'28px 22px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
-                    <div style={{fontSize:36,marginBottom:14}}>{s.icon}</div>
-                    <div style={{fontSize:16,fontWeight:800,marginBottom:8,color:'var(--text)'}}>{s.title}</div>
-                    <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
-                    <div style={{marginTop:16,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:16,padding:'36px 28px',marginBottom:48,position:'relative',overflow:'hidden'}}>
-                <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,background:'rgba(255,255,255,0.05)',borderRadius:'50%'}}/>
-                <div style={{fontSize:13,fontWeight:700,color:'#a7f3d0',textTransform:'uppercase' as any,letterSpacing:1,marginBottom:10}}>For pharmacy owners</div>
-                <div style={{fontSize:22,fontWeight:800,color:'#fff',marginBottom:10,lineHeight:1.3}}>Do you own a pharmacy or licensed drug store?</div>
-                <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:24,lineHeight:1.6}}>HealthBridge has got you covered. List your pharmacy for free, reach thousands of patients near you, and grow your business — all from your phone.</div>
-                <div style={{display:'flex',gap:12,flexWrap:'wrap' as any}}>
-                  <button onClick={()=>setPage("register")} style={{background:'#fff',color:'var(--primary)',border:'none',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
-                  <button onClick={()=>setPage("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
+              <div style={{background:'var(--card)',borderRadius:16,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center',marginBottom:40}}>
+                <div style={{fontSize:20,fontWeight:800,marginBottom:6}}>Ready to find your medication?</div>
+                <div style={{fontSize:14,color:'var(--muted)',marginBottom:20}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
+                <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+                  <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
+                  <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
                 </div>
               </div>
 
-              <div style={{marginBottom:48}}>
-                <div style={{fontSize:22,fontWeight:800,marginBottom:6}}>Frequently Asked Questions</div>
-                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to know about HealthBridge</div>
-                <div style={{display:'flex',flexDirection:'column' as any,gap:12}}>
+              <div style={{marginBottom:24}}>
+                <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
+                <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
+                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to access healthcare — in one place</div>
+                <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',WebkitOverflowScrolling:'touch',marginBottom:48} as any}>
                   {[
-                    {q:'Is HealthBridge free to use?',a:'Yes! HealthBridge is completely free for patients. You can search for pharmacies and medications at no cost.'},
-                    {q:'How do I find a pharmacy near me?',a:'Tap "Find a Pharmacy" or use the search bar on the homepage. You can search by area, street or pharmacy name.'},
-                    {q:'How do I know if a pharmacy has my medication?',a:'Tap "Find Medications", search for your drug, then use the WhatsApp button to message the pharmacy directly to confirm availability.'},
-                    {q:'How can I list my pharmacy on HealthBridge?',a:'Tap "List Your Pharmacy" and fill in the registration form. Our team will review and verify your pharmacy within 24 hours.'},
-                    {q:'Are all pharmacies on HealthBridge verified?',a:'Yes. Every pharmacy listed on HealthBridge goes through our verification process to ensure they are licensed and legitimate.'},
-                    {q:'Which areas does HealthBridge cover?',a:'We currently cover Lagos including Ikeja, Lekki, Victoria Island, Surulere, Yaba, Shomolu, Bariga, Gbagada and more. We are expanding soon.'},
-                  ].map((f,i)=>(
-                    <div key={i} style={{background:'var(--card)',borderRadius:12,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
-                      <div style={{padding:'16px 20px',fontWeight:700,fontSize:14,color:'var(--text)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                        {f.q}<span style={{color:'var(--primary)',fontSize:18,flexShrink:0,marginLeft:8}}>+</span>
-                      </div>
-                      <div style={{padding:'12px 20px 16px',fontSize:13,color:'var(--muted)',lineHeight:1.6,borderTop:'1px solid var(--border)'}}>{f.a}</div>
+                    {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
+                    {icon:'💊',title:'Find Medications',desc:'Search for specific drugs at pharmacies near you.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
+                    {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
+                    {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No stress.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
+                    {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp instantly.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
+                    {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy? Join HealthBridge free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>nav("register")},
+                  ].map(s=>(
+                    <div key={s.title} onClick={s.action} style={{minWidth:240,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'24px 20px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
+                      <div style={{fontSize:34,marginBottom:12}}>{s.icon}</div>
+                      <div style={{fontSize:15,fontWeight:800,marginBottom:6,color:'var(--text)'}}>{s.title}</div>
+                      <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
+                      <div style={{marginTop:14,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              
-                <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
-                <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap' as any}}>
-                  <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
-                  <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:16,padding:'36px 28px',marginBottom:48,position:'relative',overflow:'hidden'}}>
+                <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,background:'rgba(255,255,255,0.05)',borderRadius:'50%'}}/>
+                <div style={{fontSize:13,fontWeight:700,color:'#a7f3d0',textTransform:'uppercase',letterSpacing:1,marginBottom:10}}>For pharmacy owners</div>
+                <div style={{fontSize:22,fontWeight:800,color:'#fff',marginBottom:10,lineHeight:1.3}}>Do you own a pharmacy or licensed drug store?</div>
+                <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:24,lineHeight:1.6}}>HealthBridge has got you covered. List your pharmacy for free, reach thousands of patients near you, and grow your business — all from your phone.</div>
+                <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+                  <button onClick={()=>nav("register")} style={{background:'#fff',color:'var(--primary)',border:'none',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+                  <button onClick={()=>nav("about")} style={{background:'rgba(255,255,255,0.15)',color:'#fff',border:'1.5px solid rgba(255,255,255,0.3)',borderRadius:8,padding:'12px 24px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Learn More</button>
                 </div>
               </div>
 
@@ -366,10 +330,9 @@ export default function Home() {
           </>
         )}
 
-        {/* RESULTS */}
         {page==="results" && (
           <div className="page-wrap">
-            <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+            <button className="back-btn" onClick={()=>nav("home")}>← Back to home</button>
             <div className="page-title">Find a Pharmacy</div>
             <div className="page-sub">{filteredP.length} pharmacies found near you</div>
             <div className="top-search">
@@ -380,7 +343,7 @@ export default function Home() {
               <div>
                 <div className="p-list">
                   {filteredP.map(p=>(
-                    <div key={p.id} className="p-card" onClick={()=>{setSelected(p);setPage("detail");}}>
+                    <div key={p.id} className="p-card" onClick={()=>{setSelected(p);nav("detail");}}>
                       <div className="p-avatar">{p.emoji}</div>
                       <div className="p-body">
                         <div className="p-row1"><span className="p-name">{p.name}</span><span className="p-badge">VERIFIED</span></div>
@@ -410,10 +373,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* DETAIL */}
         {page==="detail" && selected && (
           <div className="page-wrap">
-            <button className="back-btn" onClick={()=>setPage("results")}>← Back to results</button>
+            <button className="back-btn" onClick={()=>nav("results")}>← Back to results</button>
             <div className="detail-grid">
               <div>
                 <div className="d-card">
@@ -462,10 +424,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* DRUGS */}
         {page==="drugs" && (
           <div className="page-wrap">
-            <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
+            <button className="back-btn" onClick={()=>nav("home")}>← Back to home</button>
             <div className="page-title">Find your medication</div>
             <div className="page-sub">Search for drugs available at pharmacies near you</div>
             <div className="top-search">
@@ -500,57 +461,109 @@ export default function Home() {
           </div>
         )}
 
-        {/* ABOUT */}
         {page==="about" && (
           <div>
             <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
-              <div style={{maxWidth:680,margin:'0 auto',textAlign:'center' as any,position:'relative',zIndex:1}}>
+              <div style={{maxWidth:680,margin:'0 auto',textAlign:'center',position:'relative',zIndex:1}}>
                 <div style={{display:'inline-flex',alignItems:'center',gap:7,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.2)',color:'#a7f3d0',borderRadius:20,padding:'5px 16px',fontSize:12,fontWeight:600,marginBottom:22}}>🇳🇬 Made in Nigeria</div>
                 <h1 style={{fontSize:'clamp(26px,5vw,42px)',fontWeight:800,color:'#fff',lineHeight:1.15,marginBottom:14}}>Making healthcare <span style={{color:'#67e8f9'}}>accessible</span> for every Nigerian</h1>
                 <p style={{fontSize:16,color:'rgba(255,255,255,0.75)',lineHeight:1.65}}>HealthBridge connects patients with verified pharmacies across Nigeria — fast, simple, and free.</p>
               </div>
             </div>
-            <div style={{maxWidth:860,margin:'0 auto',padding:'48px 24px'}}>
-              <button className="back-btn" onClick={()=>setPage("home")}>← Back to home</button>
-              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:20,marginBottom:48}}>
+            <div style={{maxWidth:860,margin:'0 auto',padding:'40px 24px'}}>
+              <button className="back-btn" onClick={()=>nav("home")}>← Back to home</button>
+              <div style={{fontSize:22,fontWeight:800,marginBottom:16}}>About HealthBridge</div>
+              <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:32}}>
+                <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8,marginBottom:14}}>HealthBridge is a Nigerian health-tech startup on a mission to make healthcare accessible for every Nigerian. We connect patients with verified, licensed pharmacies near them — making it easy to find medications, get directions, and contact pharmacies directly.</p>
+                <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8,marginBottom:14}}>We were built from a simple frustration — spending hours searching for a pharmacy that had the right medication. HealthBridge is the solution we wished existed.</p>
+                <p style={{fontSize:14,color:'var(--muted)',lineHeight:1.8}}>We are starting in Lagos and expanding across Nigeria. Every pharmacy on HealthBridge is verified and licensed, so you can trust what you find.</p>
+              </div>
+
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:16,marginBottom:32}}>
                 {[
-                  {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies near them — in seconds.'},
-                  {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away and every medication is accessible.'},
-                  {icon:'💡',title:'Our Story',desc:'HealthBridge was born from a simple frustration — spending hours searching for a pharmacy that had the right medication. We built the solution we wished existed.'},
-                  {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and we never charge users for finding healthcare.'},
+                  {icon:'🎯',title:'Our Mission',desc:'To make it easy for every Nigerian to find genuine medications and trusted pharmacies — in seconds.'},
+                  {icon:'👁️',title:'Our Vision',desc:'A Nigeria where no one struggles to find healthcare. Where every pharmacy is a tap away.'},
+                  {icon:'🤝',title:'Our Values',desc:'Trust, transparency and accessibility. We only list verified pharmacies and never charge users.'},
+                  {icon:'🚀',title:'Our Goal',desc:'To be the most trusted pharmacy finder in Nigeria, starting from Lagos and expanding nationwide.'},
                 ].map(s=>(
-                  <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'24px 20px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
-                    <div style={{fontSize:32,marginBottom:12}}>{s.icon}</div>
-                    <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>{s.title}</div>
+                  <div key={s.title} style={{background:'#fff',borderRadius:12,padding:'22px 18px',border:'1.5px solid #cbd5e1',boxShadow:'0 2px 12px rgba(8,145,178,0.08)'}}>
+                    <div style={{fontSize:30,marginBottom:10}}>{s.icon}</div>
+                    <div style={{fontSize:14,fontWeight:700,marginBottom:6}}>{s.title}</div>
                     <div style={{fontSize:13,color:'#64748b',lineHeight:1.6}}>{s.desc}</div>
                   </div>
                 ))}
               </div>
-              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center' as any}}>
+
+              <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:32}}>
+                <div style={{fontSize:18,fontWeight:800,marginBottom:16}}>What we offer</div>
+                {[
+                  {icon:'🏥',title:'Find Pharmacies',desc:'Search verified pharmacies near you by name, area or street.'},
+                  {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and find which pharmacies have them in stock.'},
+                  {icon:'💬',title:'WhatsApp Pharmacies',desc:'Message any pharmacy directly on WhatsApp to confirm availability before visiting.'},
+                  {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No middleman, no stress.'},
+                  {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy from your current location.'},
+                  {icon:'🏪',title:'List Your Pharmacy',desc:'Pharmacy owners can list their pharmacy for free and reach more patients.'},
+                ].map(s=>(
+                  <div key={s.title} style={{display:'flex',gap:14,alignItems:'flex-start',padding:'12px 0',borderBottom:'1px solid var(--border)'}}>
+                    <div style={{fontSize:22,flexShrink:0}}>{s.icon}</div>
+                    <div>
+                      <div style={{fontSize:14,fontWeight:700,marginBottom:3}}>{s.title}</div>
+                      <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.5}}>{s.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:32}}>
+                <div style={{fontSize:18,fontWeight:800,marginBottom:20}}>Everything you need to know</div>
+                <div style={{display:'flex',flexDirection:'column',gap:12}}>
+                  {[
+                    {icon:'🆓',title:'Is HealthBridge free?',desc:'Yes — completely free for patients. No hidden charges, no subscriptions.'},
+                    {icon:'✅',title:'Are pharmacies verified?',desc:'Every pharmacy on HealthBridge is verified and licensed by the PCN before being listed.'},
+                    {icon:'🗺️',title:'Where do we operate?',desc:'We currently cover all major areas in Lagos. Expanding soon.'},
+                    {icon:'💊',title:'How to find your medication',desc:'Tap "Find Medications", search for your drug, and WhatsApp the nearest pharmacy to confirm.'},
+                    {icon:'🏥',title:'How to find a pharmacy',desc:'Tap "Find a Pharmacy", search by name or area, view details, call or get directions.'},
+                    {icon:'📞',title:'How calling works',desc:'Tap the Call button on any pharmacy. It dials the pharmacy directly from your phone.'},
+                    {icon:'💬',title:'How WhatsApp works',desc:'Tap the WhatsApp button. A pre-filled message opens in WhatsApp — just send it.'},
+                    {icon:'🏪',title:'Listing your pharmacy',desc:'Tap "List Your Pharmacy", fill in your details, and our team will verify and list you within 24 hours — free.'},
+                    {icon:'🔒',title:'Your privacy',desc:'HealthBridge does not store your personal information or share your data with third parties.'},
+                    {icon:'📧',title:'Contact us',desc:'Reach us via WhatsApp or email. Available Monday to Saturday, 8am to 8pm WAT.'},
+                  ].map((item,i)=>(
+                    <div key={i} style={{display:'flex',gap:14,alignItems:'flex-start',padding:'14px',background:'var(--bg)',borderRadius:10,border:'1px solid var(--border)'}}>
+                      <div style={{fontSize:22,flexShrink:0}}>{item.icon}</div>
+                      <div>
+                        <div style={{fontSize:14,fontWeight:700,marginBottom:4}}>{item.title}</div>
+                        <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center'}}>
                 <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
                 <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
-                <button onClick={()=>setPage("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
+                <button onClick={()=>nav("register")} style={{background:'#fff',color:'#0891b2',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Get Listed Free →</button>
               </div>
             </div>
           </div>
         )}
 
-        {/* REGISTER */}
         {page==="register" && (
           <div className="page-wrap">
-            <button className="back-btn" onClick={()=>setPage("about")}>← Back</button>
+            <button className="back-btn" onClick={()=>nav("about")}>← Back</button>
             <div className="page-title">List Your Pharmacy Free</div>
             <div className="page-sub">Join verified pharmacies on HealthBridge and reach thousands of patients near you</div>
             <div style={{background:'var(--card)',borderRadius:'var(--radius)',padding:24,border:'1.5px solid var(--border)',boxShadow:'var(--shadow)'}}>
               {formStatus==='success' ? (
-                <div style={{textAlign:'center' as any,padding:'40px 20px'}}>
+                <div style={{textAlign:'center',padding:'40px 20px'}}>
                   <div style={{fontSize:48,marginBottom:16}}>🎉</div>
                   <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>Application Submitted!</div>
                   <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>We will review your application and get back to you within 24 hours.</div>
-                  <button onClick={()=>{setPage("home");setFormStatus('');}} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Back to Home</button>
+                  <button onClick={()=>{nav("home");setFormStatus('');}} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Back to Home</button>
                 </div>
               ) : (
-                <div style={{display:'flex',flexDirection:'column' as any,gap:16}}>
+                <div style={{display:'flex',flexDirection:'column',gap:16}}>
                   {[
                     {label:'Pharmacy Name *',key:'name',placeholder:'e.g. Lifecare Pharmacy'},
                     {label:'Owner Name *',key:'owner_name',placeholder:'Your full name'},
@@ -562,12 +575,7 @@ export default function Home() {
                   ].map(f=>(
                     <div key={f.key}>
                       <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>{f.label}</div>
-                      <input
-                        value={form[f.key as keyof typeof form]}
-                        onChange={e=>setForm({...form,[f.key]:e.target.value})}
-                        placeholder={f.placeholder}
-                        style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}
-                      />
+                      <input value={form[f.key as keyof typeof form]} onChange={e=>setForm({...form,[f.key]:e.target.value})} placeholder={f.placeholder} style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}/>
                     </div>
                   ))}
                   <div>
@@ -581,14 +589,13 @@ export default function Home() {
                   </div>
                   {formStatus==='error' && <div style={{background:'#fee2e2',color:'#dc2626',padding:'12px 16px',borderRadius:'var(--radius-sm)',fontSize:13,fontWeight:500}}>Please fill in all required fields</div>}
                   <button onClick={submitForm} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'14px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif',width:'100%',marginTop:8}}>Submit Application →</button>
-                  <div style={{fontSize:12,color:'var(--muted)',textAlign:'center' as any}}>By submitting you agree to our terms. Listing is completely free.</div>
+                  <div style={{fontSize:12,color:'var(--muted)',textAlign:'center'}}>By submitting you agree to our terms. Listing is completely free.</div>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* WHATSAPP MODAL */}
         {modal && (
           <div className="overlay" onClick={()=>setModal(null)}>
             <div className="modal" onClick={e=>e.stopPropagation()}>
