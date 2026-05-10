@@ -288,7 +288,14 @@ export default function Home() {
                 <div style={{fontSize:14,color:'var(--muted)',marginBottom:20}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
                 <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
                   <button onClick={()=>goResults("")} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find a Pharmacy</button>
-                  <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+                             </button>   {/* ← paste after this line */}
+
+            <div style={{display:'flex'...   {/* ← new divider */}
+            <button onClick={async()=>{...   {/* ← Google button */}
+
+            <div style={{textAlign:'center'...  {/* ← existing "Don't have account" */}
+ <button onClick={goDrugs} style={{background:'var(--green-light)',color:'var(--green)',border:'none',borderRadius:8,padding:'12px 28px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif'}}>Find Medications</button>
+                  
                 </div>
               </div>
 
