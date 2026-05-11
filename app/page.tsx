@@ -275,7 +275,7 @@ export default function Home() {
         <nav>
           <div className="logo" onClick={() => nav("home")}>
             <div className="logo-fb">
-              <img src="logo.jpg" className="w-2" alt="logo"/>
+              <img src="/logo.jpg" className="w-2" alt="logo"/>
               HealthBridge</div>
           </div>
           <div className="nav-links">
