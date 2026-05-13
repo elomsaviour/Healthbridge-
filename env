@@ -1,0 +1,6 @@
+NEXT_PUBLIC_BASE_URL=https://healthbridge.online
+NEXT_PUBLIC_SUPABASE_URL=https://amgjqjvpbonvhmugnoyp.supabase.co
+# IMPORTANT: Replace the value below with your real Supabase anon key.
+# It must be a JWT — copy it from: Supabase Dashboard → Project Settings → API → anon public
+# It starts with "eyJ..." and is several hundred characters long.
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ_REPLACE_WITH_YOUR_REAL_SUPABASE_ANON_KEY
