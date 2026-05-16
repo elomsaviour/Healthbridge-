@@ -2,14 +2,40 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-// ---------------------------------------------------------------------------
-// Supabase client — initialised once at module level so it is reused across
-// renders.  Both env vars are NEXT_PUBLIC_ so they are available in the
-// browser bundle.
-// ---------------------------------------------------------------------------
-const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL  ?? "";
-const supabaseKey  = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-const supabase     = createClient(supabaseUrl, supabaseKey);
+// Initialize cautiously - move the logic inside the component or check for strings
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  
+  // 1. Prevent Hydration/Build Errors by waiting for mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 2. Redirect/Window logic should check for 'window'
+  const handleGoogleLogin = async () => {
+    if (typeof window !== 'undefined') {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin },
+      });
+    }
+  };
+
+  // Rest of your state...
+
+  // If we aren't mounted, return a simple loader or null to prevent 
+  // the server from trying to render complex logic with missing window/env vars.
+  if (!mounted) return <div style={{background: '#f0fafb', minHeight: '100vh'}} />;
+
+  return (
+    // Your actual JSX here...
+  )
+}
+
 
 const S = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
