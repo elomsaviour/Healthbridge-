@@ -364,15 +364,17 @@ export default function Home() {
     await supabase.auth.signOut();
     setUser(null);
   };
-  const handleMapSearch = async () => {
-    const query = document.getElementById('map-query')?.value;
+    const handleMapSearch = async () => {
+    const el = document.getElementById('map-query') as HTMLInputElement;
+    const query = el?.value;
+    
     if (!query) return;
     try {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
       const data = await res.json();
       if (data.length > 0) {
         const { lat, lon } = data[0];
-        // This moves your Leaflet map to the area you searched
+        // Ensure mapInstance is defined in your component
         mapInstance.setView([lat, lon], 14); 
         L.marker([lat, lon]).addTo(mapInstance).bindPopup(query).openPopup();
       }
@@ -380,6 +382,25 @@ export default function Home() {
       console.log("Search error:", e);
     }
   };
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+
+    if (val.length > 1) {
+      const searchStr = val.toLowerCase();
+      // Filters your data for Name or Medications
+      const filtered = allPharmacies.filter(p => 
+        p.name.toLowerCase().includes(searchStr) || 
+        (p.meds && p.meds.some((m: string) => m.toLowerCase().includes(searchStr)))
+      ).slice(0, 5);
+      
+      setSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
 
   return (
     <>
