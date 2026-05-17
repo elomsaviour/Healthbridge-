@@ -228,6 +228,9 @@ export default function Home() {
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [mapInstance, setMapInstance] = useState<any>(null);
 
   // -------------------------------------------------------------------------
   // Load pharmacies + medications from Supabase on mount
@@ -465,16 +468,33 @@ export default function Home() {
     onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
   />
   
-  {/* Suggestion Dropdown */}
+  {/* The Hint Dropdown */}
   {showSuggestions && suggestions.length > 0 && (
     <div className="suggestions-list">
-      {suggestions.map((p) => {
-        const medMatch = p.meds?.find(m => m.toLowerCase().includes(searchQuery.toLowerCase()));
+      {suggestions.map((p: any) => {
+        const medMatch = p.meds?.find((m: string) => m.toLowerCase().includes(searchQuery.toLowerCase()));
         return (
           <div 
             key={p.id} 
             className="suggestion-item"
             onClick={() => {
+              setSearchQuery(medMatch || p.name);
+              setShowSuggestions(false);
+              goResults(medMatch || p.name);
+            }}
+          >
+            <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{p.name}</div>
+            <div style={{ fontSize: '12px', color: '#0891b2' }}>
+              {medMatch ? `💊 Stocked: ${medMatch}` : `📍 ${p.address}`}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+  <button className="btn-green" onClick={() => goResults(searchQuery)}>Search</button>
+</div>
+
               setSearchQuery(medMatch || p.name);
               setShowSuggestions(false);
               goResults(medMatch || p.name);
