@@ -131,6 +131,19 @@ const S = `
   .modal-ta { width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; font-family: Inter,sans-serif; color: var(--text); resize: none; outline: none; margin-bottom: 16px; line-height: 1.6; }
   .modal-wa { width: 100%; background: #25D366; color: #fff; border: none; border-radius: var(--radius-sm); padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
   .modal-cancel { width: 100%; background: none; border: none; font-size: 13px; color: var(--muted); cursor: pointer; font-family: Inter,sans-serif; padding: 4px; }
+  @media (max-width: 768px) {
+    /* Forces the side-by-side boxes to stack vertically */
+    .detail-grid, .split-body {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    /* Makes every box full width */
+    .d-card, .p-card {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
 `;
 
 const FALLBACK: any[] = [
