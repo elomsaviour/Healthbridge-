@@ -503,9 +503,18 @@ export default function Home() {
                 </div>
               </div>
               <div className="map-wrap">
-                <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-                <iframe className="map-frame" src={MAP_URL} loading="lazy"></iframe>
-              </div>
+  <div className="map-search">
+    <input 
+      id="map-query" 
+      placeholder="Search area (e.g. Ikeja)..." 
+      style={{ flex: 1, border: 'none', outline: 'none', padding: '8px' }}
+    />
+    <button onClick={handleMapSearch} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>🔍</button>
+  </div>
+  {/* Leaflet needs a div with an ID, NOT an iframe */}
+  <div id="map-container" style={{ height: '100%', width: '100%' }}></div>
+</div>
+
             </div>
           </div>
         )}
