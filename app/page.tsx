@@ -340,6 +340,22 @@ export default function Home() {
     await supabase.auth.signOut();
     setUser(null);
   };
+  const handleMapSearch = async () => {
+    const query = document.getElementById('map-query')?.value;
+    if (!query) return;
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      if (data.length > 0) {
+        const { lat, lon } = data[0];
+        // This moves your Leaflet map to the area you searched
+        mapInstance.setView([lat, lon], 14); 
+        L.marker([lat, lon]).addTo(mapInstance).bindPopup(query).openPopup();
+      }
+    } catch (e) {
+      console.log("Search error:", e);
+    }
+  };
 
   return (
     <>
