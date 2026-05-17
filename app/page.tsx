@@ -131,31 +131,42 @@ const S = `
   .modal-ta { width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; font-family: Inter,sans-serif; color: var(--text); resize: none; outline: none; margin-bottom: 16px; line-height: 1.6; }
   .modal-wa { width: 100%; background: #25D366; color: #fff; border: none; border-radius: var(--radius-sm); padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
   .modal-cancel { width: 100%; background: none; border: none; font-size: 13px; color: var(--muted); cursor: pointer; font-family: Inter,sans-serif; padding: 4px; }
-    /* Forces the pharmacy info cards to stack on mobile */
-  @media (max-width: 768px) {
-    .detail-grid {
+      @media (max-width: 768px) {
+    /* Stacks the pharmacy boxes vertically */
+    .detail-grid, .split-body {
       display: flex !important;
       flex-direction: column !important;
-      gap: 15px !important;
+      gap: 12px !important;
     }
-    .d-card, .map-wrap {
+    /* Ensures buttons and cards are full width */
+    .d-card, .btn-green, .hero-search {
       width: 100% !important;
-      margin: 0 !important;
-    }
-    .map-wrap {
-      height: 300px !important; /* Map must have a height to show up */
     }
   }
 
-  .map-search {
-    display: flex;
-    align-items: center;
+  /* Style for the Cowdeck-style hints */
+  .suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     background: white;
-    padding: 8px 12px;
     border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    margin-top: 5px;
+    border: 1px solid #eee;
+    max-height: 200px;
+    overflow-y: auto;
   }
+
+  .suggestion-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-align: left;
+  }
+
 
 `;
 
@@ -424,11 +435,42 @@ export default function Home() {
                 <div className="hero-badge"><div className="badge-dot"/>Nigeria's Healthcare Navigator</div>
                 <h1>Find your <span>medication</span><br/>near you in minutes</h1>
                 <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
-                <div className="hero-search">
-                  <span style={{fontSize:16,marginRight:4}}>🔍</span>
-                  <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
-                  <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
-                </div>
+                <div className="hero-search" style={{ position: 'relative' }}>
+  <span style={{ fontSize: 16, marginRight: 4 }}>🔍</span>
+  <input 
+    placeholder="Search pharmacy or medication..." 
+    value={searchQuery}
+    onChange={handleSearchInput}
+    onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
+  />
+  
+  {/* Suggestion Dropdown */}
+  {showSuggestions && suggestions.length > 0 && (
+    <div className="suggestions-list">
+      {suggestions.map((p) => {
+        const medMatch = p.meds?.find(m => m.toLowerCase().includes(searchQuery.toLowerCase()));
+        return (
+          <div 
+            key={p.id} 
+            className="suggestion-item"
+            onClick={() => {
+              setSearchQuery(medMatch || p.name);
+              setShowSuggestions(false);
+              goResults(medMatch || p.name);
+            }}
+          >
+            <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{p.name}</div>
+            <div style={{ fontSize: '12px', color: '#0891b2' }}>
+              {medMatch ? `💊 Stocked: ${medMatch}` : `📍 ${p.address}`}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+  <button className="btn-green" onClick={() => goResults(searchQuery)}>Search</button>
+</div>
+
                 <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
               </div>
             </div>
