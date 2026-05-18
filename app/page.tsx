@@ -1,11 +1,9 @@
 'use client'
 import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
 
-// Initialize Supabase with fallbacks to prevent build-time crashes
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
-const supabase = createClient(supabaseUrl, supabaseKey);
+const SUPABASE_URL = "https://amgjqjvpbonvhmugnoyp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_E6VhVYDz-ClX9vZwlN5X2A_LMH9wRAR";
+
 const S = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,11 +16,11 @@ const S = `
   }
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
   .app { min-height: 100vh; display: flex; flex-direction: column; }
-  nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(8,145,178,0.07); }
-  .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .logo-fb { font-weight: 800; font-size: 17px; color: var(--primary); }
+  nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 20px; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 6px rgba(8,145,178,0.07); }
+  .logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .logo-text { font-weight: 800; font-size: 18px; color: var(--primary); letter-spacing: -0.3px; }
   .nav-links { display: flex; gap: 2px; }
-  .nav-link { font-size: 14px; color: var(--muted); cursor: pointer; font-weight: 500; padding: 6px 13px; border-radius: 6px; transition: all 0.15s; }
+  .nav-link { font-size: 14px; color: var(--muted); cursor: pointer; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
   .nav-link:hover { color: var(--primary); background: var(--primary-light); }
   .nav-right { display: flex; gap: 8px; align-items: center; }
   .btn-ghost { font-size: 14px; font-weight: 500; color: var(--text); background: none; border: none; cursor: pointer; padding: 8px 14px; font-family: Inter,sans-serif; }
@@ -37,7 +35,7 @@ const S = `
     .hero-section { padding: 48px 16px 72px; }
     .split-body { grid-template-columns: 1fr; }
     .detail-grid { grid-template-columns: 1fr; }
-    .map-frame { height: 250px; }
+    .map-wrap { display: none; }
   }
   .hero-section { background: linear-gradient(135deg, #0891b2 0%, #0e7490 60%, #065f75 100%); padding: 72px 24px 92px; position: relative; overflow: hidden; }
   .hero-section::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 48px; background: var(--bg); border-radius: 48px 48px 0 0; }
@@ -74,7 +72,7 @@ const S = `
   .pb-view { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
   .pb-wa { background: #d1fae5; color: #059669; }
   .pb-call { background: var(--primary-light); color: var(--primary); }
-  .pagination { display: flex; align-items: center; gap: 4px; margin-top: 14px; }
+  .pagination { display: flex; align-items: center; gap: 4px; margin-top: 14px; flex-wrap: wrap; }
   .pg-info { font-size: 11px; color: var(--muted); margin-right: auto; }
   .pg-btn { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; font-size: 12px; font-weight: 600; }
   .pg-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -131,43 +129,13 @@ const S = `
   .modal-ta { width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; font-family: Inter,sans-serif; color: var(--text); resize: none; outline: none; margin-bottom: 16px; line-height: 1.6; }
   .modal-wa { width: 100%; background: #25D366; color: #fff; border: none; border-radius: var(--radius-sm); padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: Inter,sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
   .modal-cancel { width: 100%; background: none; border: none; font-size: 13px; color: var(--muted); cursor: pointer; font-family: Inter,sans-serif; padding: 4px; }
-      @media (max-width: 768px) {
-    /* Stacks the pharmacy boxes vertically */
-    .detail-grid, .split-body {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 12px !important;
-    }
-    /* Ensures buttons and cards are full width */
-    .d-card, .btn-green, .hero-search {
-      width: 100% !important;
-    }
-  }
-
-  /* Style for the Cowdeck-style hints */
-  .suggestions-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
-    margin-top: 5px;
-    border: 1px solid #eee;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-
-  .suggestion-item {
-    padding: 12px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-    text-align: left;
-  }
-
-
+  .service-cards { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .service-card { min-width: 220px; scroll-snap-align: start; border-radius: 16px; padding: 24px 20px; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.2s; }
+  .service-card:hover { transform: translateY(-2px); }
+  .service-card-icon { font-size: 34px; margin-bottom: 12px; }
+  .service-card-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+  .service-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .service-card-link { margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--primary); }
 `;
 
 const FALLBACK: any[] = [
@@ -228,197 +196,100 @@ export default function Home() {
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [mapInstance, setMapInstance] = useState<any>(null);
 
-  // -------------------------------------------------------------------------
-  // Load pharmacies + medications from Supabase on mount
-  // -------------------------------------------------------------------------
   useEffect(() => {
-    if (!supabaseUrl || !supabaseKey) return;
+    fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*&order=rating.desc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setPharmacies(data.map((p:any) => ({
+          id: p.id, name: p.name, address: p.address, phone: p.phone,
+          distance: "nearby", open: p.is_open, hours: p.opening_hours,
+          emoji: EMOJI_MAP[p.area] || "💊",
+          rating: p.rating?.toString() || "4.5",
+          reviews: p.reviews?.toString() || "0",
+          whatsapp: p.whatsapp,
+        })));
+      }
+    }).catch(() => {});
 
-    // Pharmacies
-    supabase
-      .from('pharmacies')
-      .select('*')
-      .order('rating', { ascending: false })
-      .then(({ data, error }) => {
-        if (error) { console.error('pharmacies fetch error:', error.message); return; }
-        if (data && data.length > 0) {
-          setPharmacies(data.map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            address: p.address,
-            phone: p.phone,
-            distance: "nearby",
-            open: p.is_open,
-            hours: p.opening_hours,
-            emoji: EMOJI_MAP[p.area] || "💊",
-            rating: p.rating?.toString() || "4.5",
-            reviews: p.reviews?.toString() || "0",
-            whatsapp: p.whatsapp,
-          })));
-        }
-      });
-
-    // Medications
-    supabase
-      .from('medications')
-      .select('*')
-      .order('name', { ascending: true })
-      .then(({ data, error }) => {
-        if (error) { console.error('medications fetch error:', error.message); return; }
-        if (data && data.length > 0) {
-          setMedications(data.map((m: any) => ({
-            id: m.id,
-            name: m.name,
-            type: `${m.unit} · ${m.category}`,
-            price: `₦${m.price_min}`,
-            emoji: getCategoryEmoji(m.category),
-            cat: m.category,
-          })));
-        }
-      });
-
-    // Restore session if user was previously logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) setUser(session.user);
-    });
-
-    // Listen for auth state changes (e.g. OAuth redirect back)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
+    fetch(`${SUPABASE_URL}/rest/v1/medications?select=*&order=name.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setMedications(data.map((m:any) => ({
+          id: m.id, name: m.name,
+          type: `${m.unit} · ${m.category}`,
+          price: `₦${m.price_min}`,
+          emoji: getCategoryEmoji(m.category),
+          cat: m.category,
+        })));
+      }
+    }).catch(() => {});
   }, []);
 
-  const nav = (p: string) => { setPage(p); setMenuOpen(false); };
+  const nav = (p: string) => { setPage(p); setMenuOpen(false); window.scrollTo(0,0); };
   const goResults = (q: string) => { setResultsQ(q||""); nav("results"); };
   const goDrugs = () => { setDrugsQ(""); setActiveCat("All"); nav("drugs"); };
   const filteredP = pharmacies.filter(p => p.name.toLowerCase().includes(resultsQ.toLowerCase()) || p.address.toLowerCase().includes(resultsQ.toLowerCase()));
   const filteredD = medications.filter(d => (activeCat==="All"||d.cat===activeCat) && d.name.toLowerCase().includes(drugsQ.toLowerCase()));
   const openModal = (drug: any) => { setModal(drug); setMsgText(`Hello, I'd like to confirm the availability of ${drug.name}`); };
 
-  // -------------------------------------------------------------------------
-  // Pharmacy registration form
-  // -------------------------------------------------------------------------
   const submitForm = async () => {
-    if (!form.name||!form.address||!form.phone||!form.area||!form.email||!form.owner_name) {
-      setFormStatus('error');
-      return;
-    }
+    if (!form.name||!form.address||!form.phone||!form.area||!form.email||!form.owner_name) { setFormStatus('error'); return; }
     try {
-      const { error } = await supabase
-        .from('pharmacy_submissions')
-        .insert([form]);
-      if (error) throw error;
+      await fetch(`${SUPABASE_URL}/rest/v1/pharmacy_submissions`, {
+        method:'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(form),
+      });
       setFormStatus('success');
-    } catch (e: any) {
-      console.error('form submit error:', e?.message);
-      setFormStatus('error');
-    }
+    } catch(e) { setFormStatus('error'); }
   };
 
-  // -------------------------------------------------------------------------
-  // Auth — email/password via Supabase Auth SDK
-  // -------------------------------------------------------------------------
   const handleAuth = async () => {
-    setAuthError('');
-    setAuthLoading(true);
+    setAuthError(''); setAuthLoading(true);
     try {
-      if (authMode === 'signup') {
-        const { error } = await supabase.auth.signUp({
-          email: authEmail,
-          password: authPassword,
-          options: { data: { full_name: authName } },
-        });
-        if (error) throw error;
+      const endpoint = authMode === 'signup'
+        ? `${SUPABASE_URL}/auth/v1/signup`
+        : `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: authEmail, password: authPassword }),
+      });
+      const data = await res.json();
+      if (data.error || data.error_description) {
+        setAuthError(data.error_description || data.error || 'Something went wrong');
+      } else if (authMode === 'signup') {
         setAuthSuccess('Account created! Check your email to confirm your account.');
       } else {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: authEmail,
-          password: authPassword,
-        });
-        if (error) throw error;
-        setUser(data.user);
+        setUser(data.user || { email: authEmail });
         nav('home');
       }
-    } catch (e: any) {
-      setAuthError(e?.message || 'Something went wrong. Try again.');
-    }
+    } catch(e) { setAuthError('Something went wrong. Try again.'); }
     setAuthLoading(false);
   };
 
-  // -------------------------------------------------------------------------
-  // OAuth — Google
-  // -------------------------------------------------------------------------
-  const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    });
+  const handleGoogleLogin = () => {
+    window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}`;
   };
 
-  // -------------------------------------------------------------------------
-  // Sign out
-  // -------------------------------------------------------------------------
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-  };
-    const handleMapSearch = async () => {
-    const el = document.getElementById('map-query') as HTMLInputElement;
-    const query = el?.value;
-    
-    if (!query) return;
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      if (data.length > 0) {
-        const { lat, lon } = data[0];
-        // Ensure mapInstance is defined in your component
-        mapInstance.setView([lat, lon], 14); 
-        L.marker([lat, lon]).addTo(mapInstance).bindPopup(query).openPopup();
-      }
-    } catch (e) {
-      console.log("Search error:", e);
-    }
-  };
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setSearchQuery(val);
-
-    if (val.length > 1) {
-      const searchStr = val.toLowerCase();
-      // Filters your data for Name or Medications
-      const filtered = allPharmacies.filter(p => 
-        p.name.toLowerCase().includes(searchStr) || 
-        (p.meds && p.meds.some((m: string) => m.toLowerCase().includes(searchStr)))
-      ).slice(0, 5);
-      
-      setSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
-  };
-
+  const INPUT_STYLE = {width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'} as any;
 
   return (
     <>
       <style>{S}</style>
       <div className="app">
 
+        {/* NAV */}
         <nav>
           <div className="logo" onClick={() => nav("home")}>
-            <div className="logo-fb">
-              <img src="/logo.jpg" className="w-5" alt="logo"/>
-              HealthBridge</div>
+            <div className="logo-text">HealthBridge</div>
           </div>
           <div className="nav-links">
             <span className="nav-link" onClick={() => nav("home")}>Home</span>
-           <span className="learn-more" onClick={() => setPage("about")}>Learn more →</span> 
+            <span className="nav-link" onClick={() => goResults("")}>Pharmacies</span>
             <span className="nav-link" onClick={goDrugs}>Medications</span>
             <span className="nav-link" onClick={() => nav("about")}>About us</span>
             <span className="nav-link" onClick={() => nav("register")}>List Pharmacy</span>
@@ -427,7 +298,7 @@ export default function Home() {
             {user ? (
               <>
                 <span style={{fontSize:13,color:'var(--muted)',fontWeight:500}}>👤 {user.email?.split('@')[0]}</span>
-                <button className="btn-ghost" onClick={handleSignOut}>Log out</button>
+                <button className="btn-ghost" onClick={() => setUser(null)}>Log out</button>
               </>
             ) : (
               <>
@@ -439,6 +310,7 @@ export default function Home() {
           </div>
         </nav>
 
+        {/* MOBILE MENU */}
         {menuOpen && (
           <div className="mobile-menu" style={{display:'flex'}}>
             <div className="mobile-link" onClick={() => nav("home")}>🏠 Home</div>
@@ -447,11 +319,12 @@ export default function Home() {
             <div className="mobile-link" onClick={() => nav("about")}>ℹ️ About us</div>
             <div className="mobile-link" onClick={() => nav("register")}>🏪 List Your Pharmacy</div>
             {!user && <div className="mobile-link" onClick={() => { setAuthMode('signup'); nav('auth'); }}>🔐 Sign up / Log in</div>}
-            {user && <div className="mobile-link" onClick={handleSignOut}>🚪 Log out</div>}
+            {user && <div className="mobile-link" onClick={() => setUser(null)}>🚪 Log out</div>}
             <div className="mobile-link" onClick={() => setMenuOpen(false)}>✕ Close</div>
           </div>
         )}
 
+        {/* HOME */}
         {page==="home" && (
           <>
             <div className="hero-section">
@@ -459,64 +332,17 @@ export default function Home() {
                 <div className="hero-badge"><div className="badge-dot"/>Nigeria's Healthcare Navigator</div>
                 <h1>Find your <span>medication</span><br/>near you in minutes</h1>
                 <p className="hero-sub">Search verified pharmacies near you. Get directions, call ahead, and find your medications fast.</p>
-                <div className="hero-search" style={{ position: 'relative' }}>
-  <span style={{ fontSize: 16, marginRight: 4 }}>🔍</span>
-  <input 
-    placeholder="Search pharmacy or medication..." 
-    value={searchQuery}
-    onChange={handleSearchInput}
-    onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
-  />
-  
-  {/* The Hint Dropdown */}
-  {showSuggestions && suggestions.length > 0 && (
-    <div className="suggestions-list">
-      {suggestions.map((p: any) => {
-        const medMatch = p.meds?.find((m: string) => m.toLowerCase().includes(searchQuery.toLowerCase()));
-        return (
-          <div 
-            key={p.id} 
-            className="suggestion-item"
-            onClick={() => {
-              setSearchQuery(medMatch || p.name);
-              setShowSuggestions(false);
-              goResults(medMatch || p.name);
-            }}
-          >
-            <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{p.name}</div>
-            <div style={{ fontSize: '12px', color: '#0891b2' }}>
-              {medMatch ? `💊 Stocked: ${medMatch}` : `📍 ${p.address}`}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  )}
-  <button className="btn-green" onClick={() => goResults(searchQuery)}>Search</button>
-</div>
-
-              setSearchQuery(medMatch || p.name);
-              setShowSuggestions(false);
-              goResults(medMatch || p.name);
-            }}
-          >
-            <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{p.name}</div>
-            <div style={{ fontSize: '12px', color: '#0891b2' }}>
-              {medMatch ? `💊 Stocked: ${medMatch}` : `📍 ${p.address}`}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  )}
-  <button className="btn-green" onClick={() => goResults(searchQuery)}>Search</button>
-</div>
-
+                <div className="hero-search">
+                  <span style={{fontSize:16,marginRight:4}}>🔍</span>
+                  <input placeholder="Search pharmacy or medication..." value={homeQ} onChange={e=>setHomeQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&goResults(homeQ)}/>
+                  <button className="btn-green" onClick={()=>goResults(homeQ)}>Search</button>
+                </div>
                 <div className="hero-gps" onClick={()=>goResults("")}>📍 Use my current location</div>
               </div>
             </div>
 
             <div style={{maxWidth:960,margin:'0 auto',padding:'32px 24px',width:'100%'}}>
+
               <div style={{background:'var(--card)',borderRadius:16,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',textAlign:'center',marginBottom:40}}>
                 <div style={{fontSize:20,fontWeight:800,marginBottom:6}}>Ready to find your medication?</div>
                 <div style={{fontSize:14,color:'var(--muted)',marginBottom:20}}>Join thousands of Nigerians using HealthBridge to access healthcare faster.</div>
@@ -526,24 +352,24 @@ export default function Home() {
                 </div>
               </div>
 
-              <div style={{marginBottom:24}}>
+              <div style={{marginBottom:40}}>
                 <div style={{fontSize:13,fontWeight:700,color:'var(--primary)',textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>What we do</div>
                 <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>HealthBridge has got you covered</div>
                 <div style={{fontSize:14,color:'var(--muted)',marginBottom:24}}>Everything you need to access healthcare — in one place</div>
-                <div style={{display:'flex',gap:16,overflowX:'auto',paddingBottom:16,scrollSnapType:'x mandatory',marginBottom:40} as any}>
+                <div className="service-cards">
                   {[
-                    {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
-                    {icon:'💊',title:'Find Medications',desc:'Search for specific drugs at pharmacies near you.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
-                    {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
-                    {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No stress.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
-                    {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp instantly.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
-                    {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy? Join HealthBridge free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>nav("register")},
+                    {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
+                    {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
+                    {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
+                    {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
+                    {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
+                    {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy? Join HealthBridge and reach more patients — free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>nav("register")},
                   ].map(s=>(
-                    <div key={s.title} onClick={s.action} style={{minWidth:240,scrollSnapAlign:'start',background:s.color,borderRadius:16,padding:'24px 20px',border:`1.5px solid ${s.border}`,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
-                      <div style={{fontSize:34,marginBottom:12}}>{s.icon}</div>
-                      <div style={{fontSize:15,fontWeight:800,marginBottom:6,color:'var(--text)'}}>{s.title}</div>
-                      <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{s.desc}</div>
-                      <div style={{marginTop:14,fontSize:13,fontWeight:700,color:'var(--primary)'}}>Learn more →</div>
+                    <div key={s.title} className="service-card" onClick={s.action} style={{background:s.color,border:`1.5px solid ${s.border}`}}>
+                      <div className="service-card-icon">{s.icon}</div>
+                      <div className="service-card-title">{s.title}</div>
+                      <div className="service-card-desc">{s.desc}</div>
+                      <div className="service-card-link">Learn more →</div>
                     </div>
                   ))}
                 </div>
@@ -563,6 +389,7 @@ export default function Home() {
           </>
         )}
 
+        {/* RESULTS */}
         {page==="results" && (
           <div className="page-wrap">
             <button className="back-btn" onClick={()=>nav("home")}>← Back to home</button>
@@ -599,22 +426,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="map-wrap">
-  <div className="map-search">
-    <input 
-      id="map-query" 
-      placeholder="Search area (e.g. Ikeja)..." 
-      style={{ flex: 1, border: 'none', outline: 'none', padding: '8px' }}
-    />
-    <button onClick={handleMapSearch} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>🔍</button>
-  </div>
-  {/* Leaflet needs a div with an ID, NOT an iframe */}
-  <div id="map-container" style={{ height: '100%', width: '100%' }}></div>
-</div>
-
+                <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
+                <iframe className="map-frame" src={MAP_URL} loading="lazy"></iframe>
+              </div>
             </div>
           </div>
         )}
 
+        {/* DETAIL */}
         {page==="detail" && selected && (
           <div className="page-wrap">
             <button className="back-btn" onClick={()=>nav("results")}>← Back to results</button>
@@ -633,7 +452,7 @@ export default function Home() {
                   <div className="action-grid">
                     <button className="act-btn act-wa" onClick={()=>window.open(`https://wa.me/${selected.whatsapp}`,'_blank')}>💬 WhatsApp</button>
                     <button className="act-btn act-call" onClick={()=>window.location.href=`tel:${selected.phone}`}>📞 Call</button>
-                    <button className="act-btn act-dir">🗺️ Directions</button>
+                    <button className="act-btn act-dir" onClick={()=>window.open(`https://maps.google.com/?q=${encodeURIComponent(selected.address)}`,'_blank')}>🗺️ Directions</button>
                     <button className="act-btn act-save">🔖 Save</button>
                   </div>
                 </div>
@@ -666,11 +485,12 @@ export default function Home() {
           </div>
         )}
 
+        {/* DRUGS */}
         {page==="drugs" && (
           <div className="page-wrap">
             <button className="back-btn" onClick={()=>nav("home")}>← Back to home</button>
             <div className="page-title">Find your medication</div>
-            <div className="page-sub">Search for drugs available at pharmacies near you</div>
+            <div className="page-sub">{filteredD.length} medications available near you</div>
             <div className="top-search">
               <input placeholder="🔍  Search medications..." value={drugsQ} onChange={e=>setDrugsQ(e.target.value)}/>
               <button>Search</button>
@@ -678,31 +498,26 @@ export default function Home() {
             <div className="filter-pills">
               {CATS.map(c=><button key={c} className={`pill${activeCat===c?" on":""}`} onClick={()=>setActiveCat(c)}>{c}</button>)}
             </div>
-            <div className="split-body">
-              <div className="drug-list">
-                {filteredD.map(d=>(
-                  <div key={d.id} className="drug-card">
-                    <div className="drug-img">{d.emoji}</div>
-                    <div className="drug-body">
-                      <div className="drug-name">{d.name}</div>
-                      <div className="drug-type">{d.type}</div>
-                      <div className="drug-tags">
-                        <span className="dtag dtag-avail">● Available</span>
-                        <span className="dtag dtag-price">{d.price}</span>
-                      </div>
+            <div className="drug-list">
+              {filteredD.map(d=>(
+                <div key={d.id} className="drug-card">
+                  <div className="drug-img">{d.emoji}</div>
+                  <div className="drug-body">
+                    <div className="drug-name">{d.name}</div>
+                    <div className="drug-type">{d.type}</div>
+                    <div className="drug-tags">
+                      <span className="dtag dtag-avail">● Available</span>
+                      <span className="dtag dtag-price">{d.price}</span>
                     </div>
-                    <button className="drug-wa-btn" onClick={()=>openModal(d)}>💬 WhatsApp</button>
                   </div>
-                ))}
-              </div>
-              <div className="map-wrap">
-                <div className="map-search"><span>🔍</span><input placeholder="Search on map..."/></div>
-                <iframe className="map-frame" src={MAP_URL} loading="lazy"></iframe>
-              </div>
+                  <button className="drug-wa-btn" onClick={()=>openModal(d)}>💬 WhatsApp</button>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
+        {/* ABOUT */}
         {page==="about" && (
           <div>
             <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',padding:'64px 24px 80px',position:'relative',overflow:'hidden'}}>
@@ -734,6 +549,31 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+              <div style={{background:'var(--card)',borderRadius:12,padding:'28px 24px',border:'1.5px solid var(--border)',boxShadow:'var(--shadow)',marginBottom:32}}>
+                <div style={{fontSize:18,fontWeight:800,marginBottom:20}}>Everything you need to know</div>
+                <div style={{display:'flex',flexDirection:'column',gap:12}}>
+                  {[
+                    {icon:'🆓',title:'Is HealthBridge free?',desc:'Yes — completely free for patients. No hidden charges, no subscriptions.'},
+                    {icon:'✅',title:'Are pharmacies verified?',desc:'Every pharmacy on HealthBridge is verified and licensed by the PCN before being listed.'},
+                    {icon:'🗺️',title:'Where do we operate?',desc:'We currently cover all major areas in Lagos. Expanding soon.'},
+                    {icon:'💊',title:'How to find your medication',desc:'Tap "Find Medications", search for your drug, and WhatsApp the nearest pharmacy to confirm.'},
+                    {icon:'🏥',title:'How to find a pharmacy',desc:'Tap "Find a Pharmacy", search by name or area, view details, call or get directions.'},
+                    {icon:'📞',title:'How calling works',desc:'Tap the Call button on any pharmacy. It dials the pharmacy directly from your phone.'},
+                    {icon:'💬',title:'How WhatsApp works',desc:'Tap the WhatsApp button. A pre-filled message opens in WhatsApp — just send it.'},
+                    {icon:'🏪',title:'Listing your pharmacy',desc:'Tap "List Your Pharmacy", fill in your details, and our team will verify and list you within 24 hours — free.'},
+                    {icon:'🔒',title:'Your privacy',desc:'HealthBridge does not store your personal information or share your data with third parties.'},
+                    {icon:'📧',title:'Contact us',desc:'Reach us via email at support@healthbrige.online. Available Monday to Saturday, 8am to 8pm WAT.'},
+                  ].map((item,i)=>(
+                    <div key={i} style={{display:'flex',gap:14,alignItems:'flex-start',padding:'14px',background:'var(--bg)',borderRadius:10,border:'1px solid var(--border)'}}>
+                      <div style={{fontSize:22,flexShrink:0}}>{item.icon}</div>
+                      <div>
+                        <div style={{fontSize:14,fontWeight:700,marginBottom:4}}>{item.title}</div>
+                        <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.6}}>{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div style={{background:'linear-gradient(135deg,#0891b2,#0e7490)',borderRadius:12,padding:'32px 24px',textAlign:'center'}}>
                 <div style={{fontSize:18,fontWeight:800,color:'#fff',marginBottom:8}}>Are you a pharmacy owner?</div>
                 <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',marginBottom:20}}>List your pharmacy on HealthBridge for free and reach thousands of patients near you.</div>
@@ -743,6 +583,7 @@ export default function Home() {
           </div>
         )}
 
+        {/* REGISTER */}
         {page==="register" && (
           <div className="page-wrap">
             <button className="back-btn" onClick={()=>nav("about")}>← Back</button>
@@ -769,12 +610,12 @@ export default function Home() {
                   ].map(f=>(
                     <div key={f.key}>
                       <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>{f.label}</div>
-                      <input value={form[f.key as keyof typeof form]} onChange={e=>setForm({...form,[f.key]:e.target.value})} placeholder={f.placeholder} style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)'}}/>
+                      <input value={form[f.key as keyof typeof form]} onChange={e=>setForm({...form,[f.key]:e.target.value})} placeholder={f.placeholder} style={INPUT_STYLE}/>
                     </div>
                   ))}
                   <div>
                     <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Area *</div>
-                    <select value={form.area} onChange={e=>setForm({...form,area:e.target.value})} style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none',color:'var(--text)',background:'white'}}>
+                    <select value={form.area} onChange={e=>setForm({...form,area:e.target.value})} style={{...INPUT_STYLE,background:'white'}}>
                       <option value="">Select area</option>
                       {['Lagos Island','Ikeja','Lekki','Victoria Island','Surulere','Yaba','Shomolu','Bariga','Gbagada','Ikoyi','Apapa','Ajah','Festac','Isolo','Mushin','Oshodi','Agege','Alimosho','Ikorodu','Epe'].map(a=>(
                         <option key={a} value={a}>{a}</option>
@@ -790,6 +631,7 @@ export default function Home() {
           </div>
         )}
 
+        {/* AUTH */}
         {page==="auth" && (
           <div className="page-wrap" style={{maxWidth:440}}>
             <button className="back-btn" onClick={()=>nav("home")}>← Back</button>
@@ -799,7 +641,6 @@ export default function Home() {
                 <div style={{fontSize:20,fontWeight:800,marginBottom:4}}>{authMode==='login'?'Welcome back':'Create account'}</div>
                 <div style={{fontSize:13,color:'var(--muted)'}}>{authMode==='login'?'Log in to your HealthBridge account':'Join HealthBridge for free'}</div>
               </div>
-
               <button onClick={handleGoogleLogin} style={{width:'100%',background:'#fff',color:'#374151',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'12px',fontSize:14,fontWeight:600,cursor:'pointer',fontFamily:'Inter,sans-serif',display:'flex',alignItems:'center',justifyContent:'center',gap:10,boxShadow:'var(--shadow)',marginBottom:16}}>
                 <svg width="18" height="18" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -809,13 +650,11 @@ export default function Home() {
                 </svg>
                 Continue with Google
               </button>
-
               <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
                 <div style={{flex:1,height:1,background:'var(--border)'}}/>
                 <div style={{fontSize:12,color:'var(--muted)',fontWeight:500}}>or</div>
                 <div style={{flex:1,height:1,background:'var(--border)'}}/>
               </div>
-
               {authSuccess ? (
                 <div style={{background:'#d1fae5',color:'#059669',padding:'14px 16px',borderRadius:8,fontSize:13,fontWeight:600,textAlign:'center'}}>{authSuccess}</div>
               ) : (
@@ -823,16 +662,16 @@ export default function Home() {
                   {authMode==='signup' && (
                     <div>
                       <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Full Name</div>
-                      <input value={authName} onChange={e=>setAuthName(e.target.value)} placeholder="Your full name" style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none'}}/>
+                      <input value={authName} onChange={e=>setAuthName(e.target.value)} placeholder="Your full name" style={INPUT_STYLE}/>
                     </div>
                   )}
                   <div>
                     <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Email Address</div>
-                    <input type="email" value={authEmail} onChange={e=>setAuthEmail(e.target.value)} placeholder="your@email.com" style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none'}}/>
+                    <input type="email" value={authEmail} onChange={e=>setAuthEmail(e.target.value)} placeholder="your@email.com" style={INPUT_STYLE}/>
                   </div>
                   <div>
                     <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Password</div>
-                    <input type="password" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} placeholder="Min 6 characters" style={{width:'100%',border:'1.5px solid var(--border)',borderRadius:'var(--radius-sm)',padding:'11px 14px',fontSize:14,fontFamily:'Inter,sans-serif',outline:'none'}}/>
+                    <input type="password" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} placeholder="Min 6 characters" style={INPUT_STYLE}/>
                   </div>
                   {authError && <div style={{background:'#fee2e2',color:'#dc2626',padding:'10px 14px',borderRadius:8,fontSize:13}}>{authError}</div>}
                   <button onClick={handleAuth} style={{background:'var(--primary)',color:'#fff',border:'none',borderRadius:'var(--radius-sm)',padding:'13px',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'Inter,sans-serif',width:'100%',opacity:authLoading?0.7:1}}>
@@ -850,6 +689,7 @@ export default function Home() {
           </div>
         )}
 
+        {/* WHATSAPP MODAL */}
         {modal && (
           <div className="overlay" onClick={()=>setModal(null)}>
             <div className="modal" onClick={e=>e.stopPropagation()}>
