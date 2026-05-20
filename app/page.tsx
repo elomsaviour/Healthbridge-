@@ -360,9 +360,10 @@ export default function Home() {
                   {[
                     {icon:'🏥',title:'Find a Pharmacy',desc:'Search and locate verified pharmacies near you across Lagos and beyond.',color:'#ecfeff',border:'#a5f3fc',action:()=>goResults("")},
                     {icon:'💊',title:'Find Medications',desc:'Search for specific drugs and see which pharmacies near you have them in stock.',color:'#f0fdf4',border:'#86efac',action:goDrugs},
-                    {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>goResults("")},
-                    {icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>goResults("")},
-                    {icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>goResults("")},
+                    {icon:'🗺️',title:'Get Directions',desc:'Get directions to any pharmacy directly from your location.',color:'#fefce8',border:'#fde047',action:()=>nav("about")},
+{icon:'📞',title:'Call Directly',desc:'One tap to call any pharmacy. No stress, no middleman.',color:'#eff6ff',border:'#93c5fd',action:()=>nav("about")},
+{icon:'💬',title:'Chat on WhatsApp',desc:'Message any pharmacy on WhatsApp to confirm medication availability.',color:'#f0fdf4',border:'#86efac',action:()=>nav("about")},
+
                     {icon:'🏪',title:'List Your Pharmacy',desc:'Own a pharmacy? Join HealthBridge and reach more patients — free.',color:'#fdf4ff',border:'#d8b4fe',action:()=>nav("register")},
                   ].map(s=>(
                     <div key={s.title} className="service-card" onClick={s.action} style={{background:s.color,border:`1.5px solid ${s.border}`}}>
